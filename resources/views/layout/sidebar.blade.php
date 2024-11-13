@@ -133,9 +133,6 @@
                                     List </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('brands.index') }}" class="nav-link" data-key="t-chat"> Brands </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="{{ route('categories.index') }}" class="nav-link" data-key="t-chat"> Categories </a>
                             </li>
                             <li class="nav-item">
@@ -226,16 +223,33 @@
                         </ul>
                     </div>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('otherusers.index') }}" >
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Waiter']) }}" >
                         <i class="ri-user-voice-line"></i> <span data-key="t-apps">Waiters</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('targets.index') }}" >
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Targets</span>
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Cashier']) }}" >
+                        <i class="ri-user-2-line"></i> <span data-key="t-apps">Cashiers</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Customer']) }}" >
+                        <i class="ri-user-heart-line"></i> <span data-key="t-apps">Customers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Store Keeper']) }}" >
+                        <i class="ri-store-2-line"></i> <span data-key="t-apps">Store Keepers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Kitchen']) }}" >
+                        <i class="ri-knife-blood-line"></i> <span data-key="t-apps">Kitchens</span>
+                    </a>
+                </li>
+
                 @endif
             </ul>
         </div>

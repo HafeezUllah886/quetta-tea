@@ -34,21 +34,15 @@
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label for="firstnameInput" class="form-label">User Name</label>
-                                    <input type="text" class="form-control" id="firstnameInput" name="name" placeholder="Enter User Name" value="{{auth()->user()->name}}">
+                                    <input type="text" class="form-control" readonly id="firstnameInput" name="name" placeholder="Enter User Name" value="{{auth()->user()->name}}">
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-12">
-                                <div class="mb-3">
-                                    <label for="emailInput" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="emailInput" name="email" placeholder="Enter your email" value="{{auth()->user()->email}}">
-                                </div>
-                            </div>
 
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label for="designationInput" class="form-label">Role</label>
-                                    <input type="text" class="form-control" disabled id="designationInput" placeholder="Role" value="{{auth()->user()->role == 1 ? "Admin" : "Operator"}}">
+                                    <input type="text" class="form-control" disabled id="designationInput" placeholder="Role" value="{{auth()->user()->role}}">
                                 </div>
                             </div>
                             <div class="col-lg-12">

@@ -4,52 +4,49 @@
        <div class="col-12">
               <div class="card">
                      <div class="card-header d-flex justify-content-between">
-                            <h3>Order Bookers
-                            </h3>
+                            <h3>{{$type}}s</h3>
                             <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create New</button>
                      </div>
+                     @php
+                     $types = ['Store Keeper', 'Kitchen'];
+                 @endphp
                      <div class="card-body">
                             <table class="table">
                                    <thead>
                                           <th>#</th>
                                           <th>Name</th>
-                                          <th>Email</th>
-                                          <th>Contact</th>
+                                          @if (!in_array($type, $types))
+                                          <th>Balance</th>
+                                          @endif
                                           <th>Action</th>
                                    </thead>
                                    <tbody>
-                                          @foreach ($orderbookers as $key => $booker)
+                                          @foreach ($users as $key => $user)
                                                  <tr>
                                                         <td>{{$key+1}}</td>
-                                                        <td>{{$booker->name}}</td>
-                                                        <td>{{$booker->email}}</td>
-                                                        <td>{{$booker->contact}}</td>
+                                                        <td>{{$user->name}}</td>
+                                                        @if (!in_array($type, $types))
+                                                        <td>{{getUserAccountBalance($user->id)}}</td>
+                                                        @endif
+
                                                         <td>
-                                                               <button type="button" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#edit_{{$booker->id}}">Edit</button>
+                                                               <button type="button" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#edit_{{$user->id}}">Edit</button>
                                                         </td>
                                                  </tr>
-                                                 <div id="edit_{{$booker->id}}" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                 <div id="edit_{{$user->id}}" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="myModalLabel">Edit Order Booker</h5>
+                                                                    <h5 class="modal-title" id="myModalLabel">Edit {{$type}}</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                                                                 </div>
-                                                                <form action="{{ route('orderbooker.update', $booker->id) }}" method="Post">
+                                                                <form action="{{ route('otherusers.update', $user->id) }}" method="Post">
                                                                   @csrf
                                                                   @method("patch")
                                                                          <div class="modal-body">
                                                                              <div class="form-group">
                                                                                     <label for="name">Name</label>
-                                                                                    <input type="text" name="name" value="{{$booker->name}}" required id="name" class="form-control">
-                                                                             </div>
-                                                                             <div class="form-group mt-2">
-                                                                                    <label for="email">Email</label>
-                                                                                    <input type="email" name="email" value="{{$booker->email}}" required id="email" class="form-control">
-                                                                             </div>
-                                                                             <div class="form-group mt-2">
-                                                                                    <label for="contact">Contact</label>
-                                                                                    <input type="text" name="contact" value="{{$booker->contact}}" id="contact" class="form-control">
+                                                                                    <input type="text" name="name" value="{{$user->name}}" required id="name" class="form-control">
                                                                              </div>
                                                                              <div class="form-group mt-2">
                                                                                     <label for="password">Password</label>
@@ -77,10 +74,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Create New Order Booker</h5>
+                <h5 class="modal-title" id="myModalLabel">Create New {{$type}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
-            <form action="{{ route('orderbooker.store') }}" method="post">
+            <form action="{{ route('otherusers.store', [$type]) }}" method="post">
               @csrf
                      <div class="modal-body">
                             <div class="form-group">
@@ -88,17 +85,17 @@
                                    <input type="text" name="name" required id="name" class="form-control">
                             </div>
                             <div class="form-group mt-2">
-                                   <label for="email">Email</label>
-                                   <input type="email" name="email" required id="email" class="form-control">
-                            </div>
-                            <div class="form-group mt-2">
-                                   <label for="contact">Contact</label>
-                                   <input type="text" name="contact" id="contact" class="form-control">
-                            </div>
-                            <div class="form-group mt-2">
                                    <label for="password">Password</label>
                                    <input type="password" name="password" required id="password" class="form-control">
                             </div>
+
+                            @if (!in_array($type, $types))
+                                <div class="form-group mt-2">
+                                    <label for="initial">Initial Amount</label>
+                                    <input type="number" name="initial" min="0" required id="initial" class="form-control">
+                                </div>
+                            @endif
+
                      </div>
                      <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>

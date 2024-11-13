@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('users_transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('type');
-            $table->string('category')->nullable();
-            $table->string('cnic')->nullable();
-            $table->string('contact')->nullable();
+            $table->foreignId('userID')->constrained('users', 'id');
+            $table->date('date');
+            $table->float('cr', 2)->default(0);
+            $table->float('db', 2)->default(0);
+            $table->text('notes');
+            $table->bigInteger('refID');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('users_transactions');
     }
 };
