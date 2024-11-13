@@ -16,14 +16,13 @@ require __DIR__ . '/stock.php';
 require __DIR__ . '/sale.php';
 require __DIR__ . '/reports.php';
 require __DIR__ . '/orders.php';
-require __DIR__ . '/targets.php';
+require __DIR__ . '/otherusers.php';
 
 Route::middleware('auth')->group(function () {
 
     Route::get('/', [dashboardController::class, 'index'])->name('dashboard');
     Route::resource('units', UnitsController::class)->middleware(adminCheck::class);
     Route::resource('categories', CategoriesController::class)->middleware(adminCheck::class);
-    Route::resource('brands', brandsController::class)->middleware(adminCheck::class);
     Route::resource('product', ProductsController::class)->middleware(adminCheck::class);
 
 });

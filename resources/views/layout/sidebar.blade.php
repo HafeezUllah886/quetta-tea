@@ -204,18 +204,6 @@
                                     data-key="t-basic-elements">Profit / Loss</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('reportLoadsheet') }}" class="nav-link"
-                                    data-key="t-basic-elements">Load Sheet</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('reportSalesGst') }}" class="nav-link"
-                                    data-key="t-basic-elements">Sales GST</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('reportPurchasesGst') }}" class="nav-link"
-                                    data-key="t-basic-elements">Purchases GST</a>
-                            </li>
-                            <li class="nav-item">
                                 <a onclick="newWindow('{{ route('reportProductSummary') }}')" class="nav-link"
                                     data-key="t-basic-elements">Products Summary</a>
                             </li>
@@ -226,10 +214,6 @@
                             <li class="nav-item">
                                 <a href="{{ route('reportPurchases') }}" class="nav-link"
                                     data-key="t-basic-elements">Purchases Report</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('reportComparison') }}" class="nav-link"
-                                    data-key="t-basic-elements">Comparison Report</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('reportCashbook') }}" class="nav-link"
@@ -243,8 +227,8 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('orderbooker.index') }}" >
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Orderbookers</span>
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index') }}" >
+                        <i class="ri-user-voice-line"></i> <span data-key="t-apps">Waiters</span>
                     </a>
                 </li>
                 <li class="nav-item">

@@ -20,5 +20,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update', [profileController::class, 'update'])->name('updateProfile');
     Route::post('/profile/changepassword', [profileController::class, 'changePassword'])->name('changePassword');
 
-    Route::resource('orderbooker', OrderbookerController::class)->middleware(adminCheck::class);
 });
