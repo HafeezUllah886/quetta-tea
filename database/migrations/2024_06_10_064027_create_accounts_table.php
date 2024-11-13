@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->foreignId('userID')->constrained('users', 'id');
             $table->string('type');
             $table->string('category')->nullable();
             $table->string('cnic')->nullable();
             $table->string('contact')->nullable();
-            $table->string('address')->nullable();
-            $table->string('ntn')->nullable();
-            $table->string('strn')->nullable();
             $table->timestamps();
         });
     }

@@ -45,7 +45,7 @@
                                     <h1 class="text-white">{{projectNameAuth()}}</h1>
                                 </a>
                             </div>
-                            <p class="mt-3 fs-15 fw-medium">Business Managment System</p>
+                            <p class="mt-3 fs-15 fw-medium">Restaurant Managment System</p>
                         </div>
                     </div>
                 </div>

@@ -4,9 +4,9 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Business Management System</title>
+    <title>Restaurant Management System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Business Management System" name="description" />
+    <meta content="Restaurant Management System" name="description" />
     <meta content="Hafeez Ullah" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">

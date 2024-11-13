@@ -17,10 +17,7 @@ class dashboardController extends Controller
 {
     public function index()
     {
-
-
         $months = [];
-
         for ($i = 0; $i < 12; $i++) {
             $date = Carbon::now()->subMonths($i);
 
@@ -97,7 +94,6 @@ class dashboardController extends Controller
                 $last_profit = $profit;
 
             }
-
 
             /// Top five products
             dashboard();

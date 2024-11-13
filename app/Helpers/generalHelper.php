@@ -160,14 +160,14 @@ function calculateGrowthPercentage($oldValue, $newValue) {
 
 function projectNameAuth()
 {
-    return "Bilawal Distribution";
+    return "Quetta Tea 4 You";
 }
 
 function projectNameHeader()
 {
-    return "BILAWAL DISTRIBUTION";
+    return "QUETTA TEA 4 YOU";
 }
 function projectNameShort()
 {
-    return "BD";
+    return "QT";
 }
