@@ -20,6 +20,11 @@ class userSeeder extends Seeder
             'role' => 'Admin',
         ]);
         User::create([
+            'name' => "Cashier",
+            'password' => Hash::make("cashier"),
+            'role' => 'Cashier',
+        ]);
+        User::create([
             'name' => "Waiter",
             'password' => Hash::make("waiter"),
             'role' => 'Waiter',

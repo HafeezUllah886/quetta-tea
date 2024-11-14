@@ -134,10 +134,10 @@ class dashboardController extends Controller
 
             }
 
-            if(auth()->user()->role != "Admin")
+           /*  if(auth()->user()->role != "Admin")
             {
                 return to_route('orders.index');
-            }
+            } */
 
         return view('dashboard.index', compact('sales', 'monthNames', 'expenses', 'profits', 'last_sale', 'last_expense', 'last_profit', 'topProductsArray', 'topCustomersArray'));
     }

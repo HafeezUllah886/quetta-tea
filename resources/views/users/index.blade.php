@@ -88,14 +88,6 @@
                                    <label for="password">Password</label>
                                    <input type="password" name="password" required id="password" class="form-control">
                             </div>
-
-                            @if (!in_array($type, $types))
-                                <div class="form-group mt-2">
-                                    <label for="initial">Initial Amount</label>
-                                    <input type="number" name="initial" min="0" required id="initial" class="form-control">
-                                </div>
-                            @endif
-
                      </div>
                      <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>

@@ -15,7 +15,6 @@ require __DIR__ . '/purchase.php';
 require __DIR__ . '/stock.php';
 require __DIR__ . '/sale.php';
 require __DIR__ . '/reports.php';
-require __DIR__ . '/orders.php';
 require __DIR__ . '/otherusers.php';
 
 Route::middleware('auth')->group(function () {

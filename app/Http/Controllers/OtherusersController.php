@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class OtherusersController extends Controller
@@ -23,19 +24,78 @@ class OtherusersController extends Controller
 
     public function store(request $request, $type)
     {
+
+        try
+        {
+
+        DB::beginTransaction();
+
         $request->validate(
             [
                 'name' => "unique:users,name|required",
+            ],
+            [
+                'name.unique' => "User Name Already Used",
             ]
         );
 
-        User::create(
+        $user = User::create(
             [
                 'name'      => $request->name,
                 'role'      => $type,
                 'password'  => Hash::make($request->password),
             ]
         );
+        DB::commit();
+        return back()->with('success', 'User Created');
+    }
+    catch(\Exception $e)
+    {
+        DB::rollBack();
+        return back()->with('error', $e->getMessage());
+    }
+
+
+    }
+
+    public function update(request $request, $id)
+    {
+
+        try
+        {
+
+        DB::beginTransaction();
+
+        $request->validate(
+            [
+                'name' => "unique:users,name,".$id."|required",
+            ],
+            [
+                'name.unique' => "User Name Already Used",
+            ]
+        );
+        $user = User::find($id);
+        $user->update(
+            [
+                'name'      => $request->name,
+            ]
+        );
+        if($request->password != "")
+        {
+            $user->update(
+                [
+                    'password'  => Hash::make($request->password),
+                ]
+            );  
+        }
+        DB::commit();
+        return back()->with('success', 'User Updated');
+    }
+    catch(\Exception $e)
+    {
+        DB::rollBack();
+        return back()->with('error', $e->getMessage());
+    }
 
 
     }

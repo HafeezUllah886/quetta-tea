@@ -18,6 +18,20 @@ function createTransaction($accountID, $date, $cr, $db, $notes, $ref){
 
 }
 
+function createUserTransaction($userID, $date, $cr, $db, $notes, $ref){
+    transactions::create(
+        [
+            'userID' => $userID,
+            'date' => $date,
+            'cr' => $cr,
+            'db' => $db,
+            'notes' => $notes,
+            'refID' => $ref,
+        ]
+    );
+
+}
+
 function getAccountBalance($id){
     $transactions  = transactions::where('accountID', $id);
 
