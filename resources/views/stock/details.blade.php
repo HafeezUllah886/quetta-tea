@@ -14,7 +14,7 @@
                                         <h1>{{projectNameHeader()}}</h1>
                                     </div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <h3>Product Stock</h3>
+                                        <h3>Raw Material Stock</h3>
                                     </div>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                             <div class="card-body p-4">
                                 <div class="row g-3">
                                     <div class="col-lg-3 col-6">
-                                        <p class="text-muted mb-2 text-uppercase fw-semibold">Product</p>
+                                        <p class="text-muted mb-2 text-uppercase fw-semibold">Material</p>
                                         <h5 class="fs-14 mb-0">{{ $product->name }}</h5>
                                     </div>
                                     <!--end col-->

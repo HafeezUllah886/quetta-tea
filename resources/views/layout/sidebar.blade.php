@@ -58,32 +58,6 @@
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 @if (auth()->user()->role == "Admin")
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('dashboard') }}">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
-                    </a>
-                </li> <!-- end Dashboard Menu -->
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sales" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-shopping-cart-fill"></i><span data-key="t-apps">Sale</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sales">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a onclick="newWindow('{{ route('sale.create') }}')" class="nav-link"
-                                    data-key="t-chat">Create Sale</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('sale.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Sales History</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                @endif
-
-                
-                @if (auth()->user()->role == "Admin")
-                <li class="nav-item">
                     <a class="nav-link menu-link" href="#purchase" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-shopping-cart-line"></i><span data-key="t-apps">Purchase</span>
@@ -109,7 +83,7 @@
                     <div class="collapse menu-dropdown" id="stock">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('product_stock.index') }}" class="nav-link" data-key="t-chat">Products Stock</a>
+                                <a href="{{ route('stock.index') }}" class="nav-link" data-key="t-chat">Raw Material Stock</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('stockAdjustments.index') }}" class="nav-link" data-key="t-chat">Stock Adjustment</a>
@@ -141,6 +115,22 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#raw_material" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Raw Material</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="raw_material">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('raw_material.index') }}" class="nav-link" data-key="t-chat">Material List </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('units.index') }}" class="nav-link" data-key="t-chat"> Units </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarFinance" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarFinance">
                         <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Finance</span>
@@ -155,10 +145,6 @@
                                 <a href="{{ route('accountsList', 'Business') }}" class="nav-link"
                                     data-key="t-form-select">
                                     Business Accounts </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('accountsList', 'Customer') }}" class="nav-link"
-                                    data-key="t-checkboxs-radios">Customer Accounts</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('accountsList', 'Vendor') }}" class="nav-link"

@@ -4,18 +4,18 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Products Stock </h3>
+                    <h3>Raw Material Stock </h3>
                 </div>
                 <div class="card-body">
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>Product</th>
+                            <th>Material</th>
                             <th>Stock</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            @foreach ($products as $key => $product)
+                            @foreach ($materials as $key => $product)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $product->name }}</td>
@@ -43,7 +43,7 @@
                 </div>
                 <form method="get" target="" id="form">
                   @csrf
-                  <input type="hidden" name="productID" id="productID">
+                  <input type="hidden" name="materialID" id="materialID">
                          <div class="modal-body">
                            <div class="form-group">
                             <label for="">Select Dates</label>
@@ -94,20 +94,20 @@
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
 
     <script>
-        function ViewDetails(product, unit)
+        function ViewDetails(material, unit)
         {
-            $("#productID").val(product);
+            $("#materialID").val(material);
             $('#unit').val(unit);
             $("#viewDetailsModal").modal('show');
         }
 
         $("#viewBtn").on("click", function (){
-            var productID = $("#productID").val();
+            var materialID = $("#materialID").val();
             var unit = $("#unit").find(":selected").val();
             var from = $("#from").val();
             var to = $("#to").val();
-            var url = "{{ route('stockDetails', ['id' => ':productID', 'unit' => ':unit', 'from' => ':from', 'to' => ':to']) }}"
-        .replace(':productID', productID)
+            var url = "{{ route('stockDetails', ['id' => ':materialID', 'unit' => ':unit', 'from' => ':from', 'to' => ':to']) }}"
+        .replace(':materialID', materialID)
         .replace(':unit', unit)
         .replace(':from', from)
         .replace(':to', to);

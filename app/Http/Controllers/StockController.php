@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\products;
+use App\Models\rawMaterial;
 use App\Models\stock;
 use App\Models\units;
 use Illuminate\Http\Request;
@@ -14,9 +15,9 @@ class StockController extends Controller
      */
     public function index()
     {
-        $products = products::all();
+        $materials = rawMaterial::all();
         $units = units::all();
-        return view('stock.index', compact('products', 'units'));
+        return view('stock.index', compact('materials', 'units'));
     }
 
     /**
@@ -50,7 +51,7 @@ class StockController extends Controller
 
         $cur_cr = stock::where('productID', $id)->sum('cr');
         $cur_db = stock::where('productID', $id)->sum('db');
-        
+
         $cur_balance = $cur_cr - $cur_db;
 
         $unit = units::find($unitID);

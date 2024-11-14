@@ -143,11 +143,11 @@
                         <div class="col-sm-6">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> © BMS.
+                            </script> © RMS.
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
-                                Design & Develop by Diamond Softwares
+                                Design & Develop by
                             </div>
                         </div>
                     </div>
