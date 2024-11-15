@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\accounts;
 use App\Models\expenses;
+use App\Models\items;
 use App\Models\products;
 use App\Models\purchase_details;
 use App\Models\sale_details;
@@ -29,13 +30,11 @@ class dashboardController extends Controller
 
             $months[] = ['first' => $firstDay, 'last' => $lastDay, 'name' => $monthName];
         }
-
             $months = array_reverse($months);
-
             $sales = [];
             $monthNames = [];
             $expenses = [];
-            $products = products::all();
+            $products = items::all();
             $profits = [];
 
             $last_sale = 0;
@@ -43,8 +42,7 @@ class dashboardController extends Controller
             $last_profit = 0;
             foreach($months as $key => $month)
             {
-
-                 $first = $month['first'];
+                $first = $month['first'];
                 $last = $month['last'];
                 $sale = sales::whereBetween('date', [$first, $last])->count();
                 $expense = expenses::whereBetween('date', [$first, $last])->sum('amount');
@@ -97,7 +95,7 @@ class dashboardController extends Controller
 
             /// Top five products
             dashboard();
-            $topProducts = products::withSum('saleDetails', 'qty')->withSum('saleDetails', 'ti')
+            $topProducts = items::withSum('saleDetails', 'qty')->withSum('saleDetails', 'ti')
             ->orderByDesc('sale_details_sum_qty')
             ->take(5)
             ->get();

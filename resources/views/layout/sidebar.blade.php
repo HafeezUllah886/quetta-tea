@@ -171,7 +171,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarReports" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarReports">
                         <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Reports</span>
@@ -204,7 +204,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Waiter']) }}" >

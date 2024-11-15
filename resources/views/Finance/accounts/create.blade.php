@@ -31,7 +31,6 @@
                                     <label for="type">Type</label>
                                     <select name="type" id="type" class="form-control">
                                         <option value="Business">Business</option>
-                                        <option value="Customer">Customer</option>
                                         <option value="Vendor">Vendor</option>
                                     </select>
                                 </div>
@@ -42,20 +41,6 @@
                                     <select name="category" id="category" class="form-control">
                                         <option value="Cash">Cash</option>
                                         <option value="Bank">Bank</option>
-                                        <option value="Cheque">Cheque</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-6 mt-2 customer" >
-                                <div class="form-group">
-                                    <label for="cnic">Customer Category</label>
-                                    <select name="c_type" id="c_type" class="form-control">
-                                        <option value="Distributor">Distributor</option>
-                                        <option value="Retailer">Retailer</option>
-                                        <option value="Wholeseller">Wholeseller</option>
-                                        <option value="Super Mart">Super Mart</option>
-                                        <option value="Sub Dealer">Sub Dealer</option>
-                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
                             </div>

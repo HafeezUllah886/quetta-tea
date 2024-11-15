@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('stock_adjustments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('productID')->constrained('products', 'id');
+            $table->foreignId('rawID')->constrained('raw_materials', 'id');
             $table->float('qty');
             $table->foreignId('unitID')->constrained('units', 'id');
             $table->float('unitValue');

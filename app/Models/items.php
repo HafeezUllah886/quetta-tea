@@ -5,15 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class products extends Model
+class items extends Model
 {
     use HasFactory;
     protected $guarded = [];
-
-    public function unit()
-    {
-        return $this->belongsTo(units::class, 'unitID');
-    }
 
     public function saleDetails()
     {
@@ -23,10 +18,5 @@ class products extends Model
     public function category()
     {
         return $this->belongsTo(categories::class, 'catID');
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(brands::class, 'brandID');
     }
 }

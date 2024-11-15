@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\categories;
-use App\Models\products;
-use App\Models\units;
+use App\Models\items;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class ProductsController extends Controller
+class ItemsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $items = products::all();
-        $units = units::all();
+        $items = items::all();
         $cats = categories::orderBy('name', 'asc')->get();
-        return view('products.product', compact('items', 'units', 'cats'));
+        $kitchens = User::Kitchens()->get();
+        return view('items.list', compact('items', 'kitchen', 'cats'));
     }
 
     /**
