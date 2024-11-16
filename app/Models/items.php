@@ -10,13 +10,18 @@ class items extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function saleDetails()
-    {
-        return $this->hasMany(sale_details::class, 'productID');
-    }
-
     public function category()
     {
         return $this->belongsTo(categories::class, 'catID');
+    }
+
+    public function kitchen()
+    {
+        return $this->belongsTo(User::class, 'kitchenID');
+    }
+
+    public function sizes()
+    {
+        return $this->hasMany(sizes::class, 'itemID');
     }
 }

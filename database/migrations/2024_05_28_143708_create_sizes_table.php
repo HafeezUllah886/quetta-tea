@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('sizes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->foreignId('catID')->constrained('categories', 'id');
-            $table->foreignId('kitchenID')->constrained('users', 'id');
+            $table->foreignId('itemID')->constrained('items', 'id');
+            $table->string('label');
             $table->float('price');
             $table->float('dprice')->default(0);
-            $table->string('status')->default('Active');
             $table->timestamps();
         });
+
+
     }
 
     /**
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('sizes');
     }
 };

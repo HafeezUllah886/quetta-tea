@@ -14,8 +14,10 @@ class categorySeeder extends Seeder
     public function run(): void
     {
         $cats = [
-            ['name' => 'Category 1'],
-            ['name' => 'Category 2'],
+            ['name' => 'Biryani'],
+            ['name' => 'Broast'],
+            ['name' => 'Chinese'],
+            ['name' => 'Burgers'],
         ];
 
         categories::insert($cats);

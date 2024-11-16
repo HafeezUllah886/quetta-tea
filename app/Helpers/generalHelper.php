@@ -3,6 +3,7 @@
 use App\Models\material_stock;
 use App\Models\products;
 use App\Models\purchase_details;
+use App\Models\rawMaterial;
 use App\Models\ref;
 use App\Models\sale_details;
 use App\Models\stock;
@@ -62,7 +63,7 @@ function createStock($id, $cr, $db, $date, $notes, $ref)
 {
     stock::create(
         [
-            'productID'     => $id,
+            'rawID'          => $id,
             'cr'            => $cr,
             'db'            => $db,
             'date'          => $date,
@@ -73,7 +74,7 @@ function createStock($id, $cr, $db, $date, $notes, $ref)
 }
 
 function getStock($id){
-    $stocks  = stock::where('productID', $id)->get();
+    $stocks  = stock::where('rawID', $id)->get();
     $balance = 0;
     foreach($stocks as $stock)
     {
@@ -86,7 +87,7 @@ function getStock($id){
 
 function avgSalePrice($from, $to, $id)
 {
-    $sales = sale_details::where('productID', $id);
+    $sales = sale_details::where('itemID', $id);
     if($from != 'all' && $to != 'all')
     {
         $sales->whereBetween('date', [$from, $to]);
@@ -109,7 +110,7 @@ function avgSalePrice($from, $to, $id)
 
 function avgPurchasePrice($from, $to, $id)
 {
-    $purchases = purchase_details::where('productID', $id);
+    $purchases = purchase_details::where('rawID', $id);
     if($from != 'all' && $to != 'all')
     {
         $purchases->whereBetween('date', [$from, $to]);
@@ -131,7 +132,7 @@ function avgPurchasePrice($from, $to, $id)
 
 function stockValue()
 {
-    $products = products::all();
+    $products = rawMaterial::all();
 
     $value = 0;
     foreach($products as $product)

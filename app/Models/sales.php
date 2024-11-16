@@ -20,14 +20,4 @@ class sales extends Model
     {
         return $this->hasMany(sale_details::class, 'salesID');
     }
-
-    public function payments()
-    {
-        return $this->hasMany(sale_payments::class, 'salesID');
-    }
-
-    public function orderbooker()
-    {
-        return $this->belongsTo(User::class, 'orderbookerID');
-    }
 }

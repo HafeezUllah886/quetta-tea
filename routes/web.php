@@ -3,7 +3,7 @@
 use App\Http\Controllers\brandsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\dashboardController;
-use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\UnitsController;
 use App\Http\Middleware\adminCheck;
@@ -24,7 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('units', UnitsController::class)->middleware(adminCheck::class);
     Route::resource('categories', CategoriesController::class)->middleware(adminCheck::class);
     Route::resource('raw_material', RawMaterialController::class)->middleware(adminCheck::class);
-    Route::resource('product', ProductsController::class)->middleware(adminCheck::class);
+    Route::resource('items', ItemsController::class)->middleware(adminCheck::class);
+    Route::get('item/status/{id}', [ItemsController::class, 'status'])->name('item.status')->middleware(adminCheck::class);
 
 });
 

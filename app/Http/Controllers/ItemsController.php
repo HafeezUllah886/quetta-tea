@@ -14,10 +14,9 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $items = items::all();
-        $cats = categories::orderBy('name', 'asc')->get();
-        $kitchens = User::Kitchens()->get();
-        return view('items.list', compact('items', 'kitchen', 'cats'));
+        $items = items::with('sizes')->orderBy('catID', 'asc')->get();
+
+        return view('items.list', compact('items'));
     }
 
     /**
@@ -25,7 +24,9 @@ class ItemsController extends Controller
      */
     public function create()
     {
-        //
+        $cats = categories::orderBy('name', 'asc')->get();
+        $kitchens = User::Kitchens()->get();
+        return view('items.create', compact('cats', 'kitchens'));
     }
 
     /**
@@ -42,7 +43,17 @@ class ItemsController extends Controller
             ]
         );
 
-        products::create($request->all());
+        $photo_path1 = null;
+        if($request->hasFile('photo')){
+
+            $image = $request->file('photo');
+            $filename = $request->name.".".$image->getClientOriginalExtension();
+            $image_path = public_path('/items/'.$filename);
+            $photo_path1 = '/items/'.$filename;
+            $image->move(public_path('/items/'), $filename);
+        }
+
+        items::create($request->all());
 
         return back()->with('success', 'Product Created');
     }
@@ -90,5 +101,26 @@ class ItemsController extends Controller
     public function destroy(products $products)
     {
         //
+    }
+
+    public function status($id)
+    {
+        $item = items::find($id);
+        if($item->status == "Active")
+        {
+           $status = "Inactive";
+        }
+        else
+        {
+            $status = "Active";
+        }
+
+        $item->update(
+            [
+                'status' => $status,
+            ]
+        );
+
+        return back()->with('success', "Status Updated");
     }
 }

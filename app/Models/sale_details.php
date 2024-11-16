@@ -13,11 +13,11 @@ class sale_details extends Model
 
     public function product()
     {
-        return $this->belongsTo(products::class, 'productID');
+        return $this->belongsTo(items::class, 'itemID');
     }
 
-    public function unit()
+    public function category()
     {
-        return $this->belongsTo(units::class, 'unitID');
+        return $this->belongsTo(categories::class, 'catID');
     }
 }
