@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('itemID')->constrained('items', 'id');
-            $table->string('label');
+            $table->string('title');
             $table->float('price');
             $table->float('dprice')->default(0);
             $table->timestamps();

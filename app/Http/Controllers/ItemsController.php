@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\categories;
 use App\Models\items;
+use App\Models\sizes;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+
+use Illuminate\Support\Str;
 
 class ItemsController extends Controller
 {
@@ -36,24 +41,52 @@ class ItemsController extends Controller
     {
         $request->validate(
             [
-                'name' => "unique:products,name",
+                'name' => "unique:items,name",
             ],
             [
-            'name.unique' => "Product already Existing",
+            'name.unique' => "Item already Existing",
             ]
         );
 
         $photo_path1 = null;
-        if($request->hasFile('photo')){
 
-            $image = $request->file('photo');
-            $filename = $request->name.".".$image->getClientOriginalExtension();
-            $image_path = public_path('/items/'.$filename);
-            $photo_path1 = '/items/'.$filename;
-            $image->move(public_path('/items/'), $filename);
+        if ($request->hasFile('img')) {
+
+            $request->validate([
+                'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            $image = $request->file('img');
+            $filename = Str::slug($request->name, '_') . '_' . time() . '.' . $image->getClientOriginalExtension();
+
+            // Resize and save the new image
+            $resizedImage = Image::make($image)
+                ->fit(300, 300) // Crop or resize to 300x300
+                ->encode($image->getClientOriginalExtension(), 80); // Compress to 80% quality
+
+            $photo_path1 = $filename;
+            Storage::disk('public')->put($photo_path1, $resizedImage);
         }
 
-        items::create($request->all());
+        $request->merge([
+            'img' => $photo_path1,
+        ]);
+        $item = items::create($request->except(['title', 'price', 'dprice']));
+
+        $options = $request->title;
+
+        foreach($options as $key => $option)
+        {
+            sizes::create(
+                [
+                    'itemID' => $item->id,
+                    'title' => $request->title[$key],
+                    'price' => $request->price[$key],
+                    'dprice' => $request->dprice[$key],
+
+                ]
+            );
+        }
 
         return back()->with('success', 'Product Created');
     }
@@ -70,7 +103,7 @@ class ItemsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(products $products)
+    public function edit(items $products)
     {
         //
     }

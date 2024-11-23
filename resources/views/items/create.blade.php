@@ -16,7 +16,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('account.store') }}" method="post">
+                    <form action="{{ route('items.store') }}" enctype="multipart/form-data" method="post">
                         @csrf
                         <div class="row">
                             <div class="col-6">
@@ -40,6 +40,11 @@
                                             <option value="{{ $kit->id }}">{{ $kit->name }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="img">Image</label>
+                                    <input type="file" id="img" class="form-control mb-3" name="img">
+                                    <img id="imgPreview" src="#" alt="Image Preview" style="display: none; width: 100px; height: 100px;border-radius:20px;">
                                 </div>
                             </div>
                             <div class="col-6 p-0">
@@ -73,27 +78,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-6">
-                                <div class="row mt-2">
-                                    <div class="col-lg-12">
-                                        <div class="justify-content-between d-flex align-items-center mb-3">
-                                            <h5 class="mb-0">Item Image</h5>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <input type="file" class="filepond filepond-input-multiple"
-                                                    name="filepond" data-allow-reorder="true" data-max-file-size="3MB"
-                                                    data-max-files="3">
-                                            </div>
-                                            <!-- end card body -->
-                                        </div>
-                                        <!-- end card -->
 
-                                        <!-- end row -->
-                                    </div>
-                                    <!-- end col -->
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-12 mt-3">
@@ -109,18 +94,9 @@
 
 
 @endsection
-@section('page-css')
-    <link rel="stylesheet" href="{{ asset('assets/libs/filepond/filepond.min.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}" type="text/css" />
-@endsection
-@section('page-js')
-    <script src="{{ asset('assets/libs/filepond/filepond.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js') }}"></script>
 
-    <script src="{{ asset('assets/js/pages/form-file-upload.init.js') }}"></script>
+@section('page-js')
+
     <script>
         var optionCount = 1;
         function addOption() {
@@ -129,12 +105,30 @@
             html += '<td><input type="text" name="title[]" class="form-control form-control-sm" id="title_' + optionCount + '"></td>';
             html += '<td><input type="number" name="price[]" class="form-control form-control-sm" id="price_' + optionCount + '"></td>';
             html += '<td><input type="number" name="dprice[]" class="form-control form-control-sm" id="dprice_' + optionCount + '"></td>';
-            html += '<td> <span class="btn btn-sm btn-danger" onclick="deleteRow(' + optionCount + ')">X</span>' + optionCount + ' </td>';
+            html += '<td> <span class="btn btn-sm btn-danger" onclick="deleteRow(' + optionCount + ')">X</span></td>';
             html += '</tr>';
             $("#options").append(html);
         }
         function deleteRow(optionCount) {
             $('#row_' + optionCount).remove();
         }
+
+        $("#img").change(function () {
+        // Get the selected file
+        var file = this.files[0];
+        if (file) {
+            // Create a FileReader
+            var reader = new FileReader();
+            // Set a function to run when the file is loaded
+            reader.onload = function (e) {
+                // Set the source of the image element to the Data URL
+                $("#imgPreview").attr("src", e.target.result);
+                // Display the image element
+                $("#imgPreview").show();
+            };
+            // Read the file as a Data URL
+            reader.readAsDataURL(file);
+        }
+    });
     </script>
 @endsection

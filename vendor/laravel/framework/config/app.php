@@ -87,25 +87,6 @@ return [
 
     'locale' => env('APP_LOCALE', 'en'),
 
-    'domains' => [
-        'quetta-tea.test',
-        'jaffar-s.test',
-        'jaffar.diamondquetta.com',
-        'jaffartest.diamondquetta.com',
-        'jaffar.run',
-    ],
-
-    'databases' => [
-        'u788011464_jaffar',
-        'quettatea',
-        'test',
-    ],
-
-    'files' =>
-    [
-        '67372',
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

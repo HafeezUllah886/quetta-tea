@@ -20,6 +20,7 @@
                     <table class="table table-striped" id="buttons-datatables">
                         <thead>
                             <th>#</th>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Kitchen</th>
@@ -31,6 +32,11 @@
                             @foreach ($items as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        @if($item->img)
+                                            <img src="{{ asset('storage/' . $item->img) }}" alt="Product Image" class="img-thumbnail" width="100" height="100">
+                                        @endif
+                                    </td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->category->name }}</td>
                                     <td>{{ $item->kitchen->name }}</td>

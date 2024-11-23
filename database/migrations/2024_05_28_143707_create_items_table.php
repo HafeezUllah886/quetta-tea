@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->foreignId('catID')->constrained('categories', 'id');
             $table->foreignId('kitchenID')->constrained('users', 'id');
-            $table->text('image')->nullable();
+            $table->text('img')->nullable();
             $table->string('status')->default('Active');
             $table->timestamps();
         });

@@ -20,11 +20,11 @@ class itemsSeeder extends Seeder
         ];
 
         $sizes = [
-            ['itemID' => 1,'label' => "Singel", 'price' => 230, 'dprice' => 200],
-            ['itemID' => 1,'label' => "Double", 'price' => 380, 'dprice' => 350],
-            ['itemID' => 2,'label' => "Quater", 'price' => 300, 'dprice' => 260],
-            ['itemID' => 2,'label' => "Full", 'price' => 600, 'dprice' => 550],
-            ['itemID' => 3,'label' => "Standered", 'price' => 630, 'dprice' => 600],
+            ['itemID' => 1,'title' => "Singel", 'price' => 230, 'dprice' => 200],
+            ['itemID' => 1,'title' => "Double", 'price' => 380, 'dprice' => 350],
+            ['itemID' => 2,'title' => "Quater", 'price' => 300, 'dprice' => 260],
+            ['itemID' => 2,'title' => "Full", 'price' => 600, 'dprice' => 550],
+            ['itemID' => 3,'title' => "Standered", 'price' => 630, 'dprice' => 600],
         ];
         items::insert($data);
         sizes::insert($sizes);
