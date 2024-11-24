@@ -34,7 +34,7 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>
                                         @if($item->img)
-                                            <img src="{{ asset('storage/' . $item->img) }}" alt="Product Image" class="img-thumbnail" width="100" height="100">
+                                            <img src="{{ asset($item->img) }}" alt="Product Image" class="img-thumbnail" width="50" height="50">
                                         @endif
                                     </td>
                                     <td>{{ $item->name }}</td>
@@ -44,7 +44,7 @@
                                         <table class="w-100">
                                             @foreach ($item->sizes as $size)
                                                 <tr>
-                                                    <td>{{$size->label}}</td>
+                                                    <td>{{$size->title}}</td>
                                                     <td>{{$size->price}}</td>
                                                     <td>{{$size->dprice}}</td>
                                                 </tr>
@@ -53,8 +53,7 @@
                                     </td>
                                     <td><a href="{{route('item.status', [$item->id])}}" class="badge bg-{{$item->status == "Active" ? "success" : "danger"}}">{{$item->status}}</a></td>
                                     <td>
-                                        <button type="button" class="btn btn-info " data-bs-toggle="modal"
-                                            data-bs-target="#edit_{{ $item->id }}">Edit</button>
+                                        <a href="{{route('items.edit', $item->id)}}" class="btn btn-info">Edit</a>
                                     </td>
                                 </tr>
 

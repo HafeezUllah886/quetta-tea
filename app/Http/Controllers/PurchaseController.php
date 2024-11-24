@@ -7,6 +7,7 @@ use App\Models\products;
 use App\Models\purchase;
 use App\Models\purchase_details;
 use App\Models\purchase_payments;
+use App\Models\rawMaterial;
 use App\Models\stock;
 use App\Models\transactions;
 use App\Models\units;
@@ -33,11 +34,11 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        $products = products::orderby('name', 'asc')->get();
+        $raw_materials = rawMaterial::orderby('name', 'asc')->get();
         $units = units::all();
         $vendors = accounts::vendor()->get();
         $accounts = accounts::business()->get();
-        return view('purchase.create', compact('products', 'units', 'vendors', 'accounts'));
+        return view('purchase.create', compact('raw_materials', 'units', 'vendors', 'accounts'));
     }
 
     /**

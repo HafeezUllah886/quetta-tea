@@ -8,7 +8,9 @@ use App\Models\sizes;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\gd\Driver;
 
 use Illuminate\Support\Str;
 
@@ -48,7 +50,7 @@ class ItemsController extends Controller
             ]
         );
 
-        $photo_path1 = null;
+        $filePath = null;
 
         if ($request->hasFile('img')) {
 
@@ -57,21 +59,31 @@ class ItemsController extends Controller
             ]);
 
             $image = $request->file('img');
-            $filename = Str::slug($request->name, '_') . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $filename = time() . '.' . $image->getClientOriginalExtension();
 
-            // Resize and save the new image
-            $resizedImage = Image::make($image)
-                ->fit(300, 300) // Crop or resize to 300x300
-                ->encode($image->getClientOriginalExtension(), 80); // Compress to 80% quality
+          $image->move('uploads', $filename);
 
-            $photo_path1 = $filename;
-            Storage::disk('public')->put($photo_path1, $resizedImage);
+           $manager = new ImageManager(new Driver());
+
+           $resize = $manager->read('uploads/' . $filename);
+
+           $resize->cover(200, 200);
+
+           $resize->save(public_path('uploads/items/'. $filename));
+           $filePath = 'uploads/items/' . $filename;
+           if (file_exists('uploads/'.$filename)) {
+            unlink('uploads/'.$filename);
+        }
         }
 
-        $request->merge([
-            'img' => $photo_path1,
-        ]);
-        $item = items::create($request->except(['title', 'price', 'dprice']));
+        $item = items::create(
+            [
+                'name' => $request->name,
+                'catID' => $request->catID,
+                'kitchenID' => $request->kitchenID,
+                'img' => $filePath,
+            ]
+        );
 
         $options = $request->title;
 
@@ -94,18 +106,20 @@ class ItemsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($all)
+    public function show()
     {
-        $categories = categories::with('products')->get();
-        return view('products.pricelist', compact('categories'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(items $products)
+    public function edit($id)
     {
-        //
+        $item = items::find($id);
+        $cats = categories::orderBy('name', 'asc')->get();
+        $kitchens = User::Kitchens()->get();
+        return view('items.edit', compact('cats', 'kitchens', 'item'));
+
     }
 
     /**
@@ -115,23 +129,88 @@ class ItemsController extends Controller
     {
         $request->validate(
             [
-                'name' => "unique:products,name,".$id,
+                'name' => "unique:items,name," . $id,
             ],
             [
-            'name.unique' => "Product already Existing",
+            'name.unique' => "Item already Existing",
             ]
         );
 
-        $product = products::find($id);
-        $product->update($request->all());
+        $item = items::find($id);
 
-        return back()->with('success', 'Product Updated');
+        $item->update(
+            [
+                'name' => $request->name,
+                'catID' => $request->catID,
+                'kitchenID' => $request->kitchenID,
+            ]
+        );
+
+        foreach($item->sizes as $option)
+        {
+            $option->delete();
+        }
+        $options = $request->title;
+
+        foreach($options as $key => $option)
+        {
+            sizes::create(
+                [
+                    'itemID' => $item->id,
+                    'title' => $request->title[$key],
+                    'price' => $request->price[$key],
+                    'dprice' => $request->dprice[$key],
+
+                ]
+            );
+        }
+
+        $filePath = null;
+
+        if ($request->hasFile('img')) {
+
+            $request->validate([
+                'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            $oldImg = asset($item->img);
+            if (file_exists($oldImg)) {
+                unlink($oldImg);
+            }
+
+            $image = $request->file('img');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+
+          $image->move('uploads', $filename);
+
+           $manager = new ImageManager(new Driver());
+
+           $resize = $manager->read('uploads/' . $filename);
+
+           $resize->cover(200, 200);
+
+           $resize->save(public_path('uploads/items/'. $filename));
+           $filePath = 'uploads/items/' . $filename;
+           if (file_exists('uploads/'.$filename)) {
+            unlink('uploads/'.$filename);
+            }
+
+            $item->update(
+                [
+                    'img' => $filePath,
+                ]
+            );
+        }
+
+
+
+        return back()->with('success', 'Item Updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(products $products)
+    public function destroy(items $products)
     {
         //
     }

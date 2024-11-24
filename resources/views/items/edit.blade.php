@@ -4,7 +4,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Create Menu Item</h3>
+                    <h3>Edit Menu Item - {{$item->name}}</h3>
                     <a href="{{route('items.index')}}" class="btn btn-primary ">View List</a>
                 </div>
                 <div class="card-body">
@@ -17,20 +17,21 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ route('items.store') }}" enctype="multipart/form-data" method="post">
+                    <form action="{{ route('items.update', $item->id) }}" enctype="multipart/form-data" method="post">
                         @csrf
+                        @method("PUT")
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" name="name" id="name" value="{{ old('name') }}"
+                                    <input type="text" name="name" id="name" value="{{ $item->name }}"
                                         class="form-control">
                                 </div>
                                 <div class="form-group mt-2">
                                     <label for="catID">Category</label>
                                     <select name="catID" id="catID" class="form-control">
                                         @foreach ($cats as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                            <option value="{{ $cat->id }}" @selected($item->catID == $cat->id)>{{ $cat->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -38,14 +39,14 @@
                                     <label for="kitchenID">Kitchen</label>
                                     <select name="kitchenID" id="kitchenID" class="form-control">
                                         @foreach ($kitchens as $kit)
-                                            <option value="{{ $kit->id }}">{{ $kit->name }}</option>
+                                            <option value="{{ $kit->id }}" @selected($item->kitchenID == $kit->id)>{{ $kit->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group mt-2">
                                     <label for="img">Image</label>
                                     <input type="file" id="img" class="form-control mb-3" name="img">
-                                    <img id="imgPreview" src="#" alt="Image Preview" style="display: none; width: 100px; height: 100px;border-radius:20px;">
+                                    <img id="imgPreview" src="{{asset($item->img)}}" alt="Image Preview" style="width: 100px; height: 100px;border-radius:20px;">
                                 </div>
                             </div>
                             <div class="col-6 p-0">
@@ -62,20 +63,26 @@
                                         <th></th>
                                     </thead>
                                     <tbody id="options">
-                                        <tr>
+                                        @foreach ($item->sizes as $key => $size)
+                                        <tr id="row_{{$key}}">
                                             <td>
-                                                <input type="text" name="title[]" required id="title_1"
+                                                <input type="text" name="title[]" value="{{$size->title}}" required id="title_{{$key}}"
                                                     class="form-control form-control-sm">
                                             </td>
                                             <td>
-                                                <input type="number" name="price[]" required id="price_1"
+                                                <input type="number" name="price[]" value="{{$size->price}}" required id="price_{{$key}}"
                                                     class="form-control form-control-sm">
                                             </td>
                                             <td>
-                                                <input type="number" name="dprice[]" required id="dprice_1"
+                                                <input type="number" name="dprice[]" value="{{$size->dprice}}" required id="dprice_{{$key}}"
                                                     class="form-control form-control-sm">
                                             </td>
+                                            @if ($key > 0)
+                                            <td> <span class="btn btn-sm btn-danger" onclick="deleteRow({{$key}})">X</span></td>
+                                            @endif
                                         </tr>
+                                        @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -83,7 +90,7 @@
                         </div>
 
                         <div class="col-12 mt-3">
-                            <button type="submit" class="btn btn-secondary w-100">Create</button>
+                            <button type="submit" class="btn btn-secondary w-100">Update</button>
                         </div>
                     </form>
                 </div>
@@ -99,7 +106,7 @@
 @section('page-js')
 
     <script>
-        var optionCount = 1;
+        var optionCount = <?php echo json_encode($item->sizes->count()); ?>;
         function addOption() {
             optionCount += 1;
             var html = '<tr id="row_' + optionCount + '">';

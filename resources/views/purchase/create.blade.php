@@ -20,11 +20,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="product">Product</label>
-                                    <select name="product" class="selectize" id="product">
+                                    <label for="raw">Raw Materials</label>
+                                    <select name="raw" class="selectize" id="raw">
                                         <option value="0"></option>
-                                        @foreach ($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        @foreach ($raw_materials as $raw)
+                                            <option value="{{ $raw->id }}">{{ $raw->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
