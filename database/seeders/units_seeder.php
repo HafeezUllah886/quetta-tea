@@ -15,7 +15,10 @@ class units_seeder extends Seeder
     {
         $data = [
             ['name' => "Nos", "value" => 1],
-            ['name' => "Box of 10's", "value" => 10],
+            ['name' => "KG", "value" => 1000],
+            ['name' => "Gram", "value" => 1],
+            ['name' => "Ltr", "value" => 1000],
+            ['name' => "Dzn", "value" => 12],
         ];
         units::insert($data);
     }

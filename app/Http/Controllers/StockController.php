@@ -41,16 +41,16 @@ class StockController extends Controller
      */
     public function show($id, $unitID, $from, $to)
     {
-        $product = products::find($id);
+        $product = rawMaterial::find($id);
 
-        $stocks = stock::where('productID', $id)->whereBetween('date', [$from, $to])->get();
+        $stocks = stock::where('rawID', $id)->whereBetween('date', [$from, $to])->get();
 
-        $pre_cr = stock::where('productID', $id)->whereDate('date', '<', $from)->sum('cr');
-        $pre_db = stock::where('productID', $id)->whereDate('date', '<', $from)->sum('db');
+        $pre_cr = stock::where('rawID', $id)->whereDate('date', '<', $from)->sum('cr');
+        $pre_db = stock::where('rawID', $id)->whereDate('date', '<', $from)->sum('db');
         $pre_balance = $pre_cr - $pre_db;
 
-        $cur_cr = stock::where('productID', $id)->sum('cr');
-        $cur_db = stock::where('productID', $id)->sum('db');
+        $cur_cr = stock::where('rawID', $id)->sum('cr');
+        $cur_db = stock::where('rawID', $id)->sum('db');
 
         $cur_balance = $cur_cr - $cur_db;
 

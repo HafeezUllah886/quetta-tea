@@ -39,29 +39,23 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>Inv #</th>
+                            <th>Purchase #</th>
                             <th>Vendor</th>
                             <th>Date</th>
                             <th>Amount</th>
-                          {{--   <th>Paid</th>
-                            <th>Due</th> --}}
                             <th>Action</th>
                         </thead>
                         <tbody>
                             @foreach ($purchases as $key => $purchase)
                                 @php
-                                    $amount = $purchase->net;
-                                    $paid = $purchase->payments->sum('amount');
-                                    $due = $amount - $paid;
+                                    $amount = $purchase->details->sum('amount');
                                 @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $purchase->inv }}</td>
+                                    <td>{{ $purchase->id }}</td>
                                     <td>{{ $purchase->vendor->title }}</td>
                                     <td>{{ date('d M Y', strtotime($purchase->date)) }}</td>
                                     <td>{{ number_format($amount) }}</td>
-                                   {{--  <td>{{ number_format($paid) }}</td>
-                                    <td>{{ number_format($due) }}</td> --}}
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -82,12 +76,6 @@
                                                         Edit
                                                     </a>
                                                 </li>
-                                               {{--  <li>
-                                                    <a class="dropdown-item" onclick="newWindow('{{route('purchasePayment.index', $purchase->id)}}')">
-                                                        <i class="ri-money-dollar-circle-fill align-bottom me-2 text-muted"></i>
-                                                        Payments
-                                                    </a>
-                                                </li> --}}
                                                 <li>
                                                     <a class="dropdown-item text-danger" href="{{route('purchases.delete', $purchase->id)}}">
                                                         <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>

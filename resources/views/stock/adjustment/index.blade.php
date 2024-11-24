@@ -12,7 +12,7 @@
                         <thead>
                             <th>#</th>
                             <th>Ref #</th>
-                            <th>Product</th>
+                            <th>Material</th>
                             <th>Date</th>
                             <th>Type</th>
                             <th>Qty</th>

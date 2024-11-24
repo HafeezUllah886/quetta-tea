@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('units', UnitsController::class)->middleware(adminCheck::class);
     Route::resource('categories', CategoriesController::class)->middleware(adminCheck::class);
     Route::resource('raw_material', RawMaterialController::class)->middleware(adminCheck::class);
+    Route::get('get/raw_material/{id}', [RawMaterialController::class, 'getMaterial']);
+
     Route::resource('items', ItemsController::class)->middleware(adminCheck::class);
     Route::get('item/status/{id}', [ItemsController::class, 'status'])->name('item.status')->middleware(adminCheck::class);
 

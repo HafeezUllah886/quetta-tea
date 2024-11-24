@@ -20,7 +20,6 @@ function getRef(){
         $ref->ref = 1;
     }
     $ref->save();
-    dashboard();
     return $ref->ref;
 }
 
@@ -83,28 +82,6 @@ function getStock($id){
     }
 
     return $balance;
-}
-
-function avgSalePrice($from, $to, $id)
-{
-    $sales = sale_details::where('itemID', $id);
-    if($from != 'all' && $to != 'all')
-    {
-        $sales->whereBetween('date', [$from, $to]);
-    }
-    $sales_amount = $sales->sum('ti');
-    $sales_qty = $sales->sum('qty');
-
-    if($sales_qty > 0)
-    {
-        $sale_price = $sales_amount / $sales_qty;
-    }
-    else
-    {
-        $sale_price = 0;
-    }
-
-    return $sale_price;
 }
 
 

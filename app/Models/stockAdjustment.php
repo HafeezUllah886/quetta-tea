@@ -12,7 +12,7 @@ class stockAdjustment extends Model
 
     public function product()
     {
-        return $this->belongsTo(products::class, 'productID');
+        return $this->belongsTo(rawMaterial::class, 'rawID');
     }
 
     public function unit()

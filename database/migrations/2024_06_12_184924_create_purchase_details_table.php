@@ -15,14 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('purchaseID')->constrained('purchases', 'id');
             $table->foreignId('rawID')->constrained('raw_materials', 'id');
-            $table->float('pprice', 10);
             $table->float('price', 10);
-            $table->float('wsprice', 10);
             $table->float('qty');
-            $table->float('tp');
             $table->float('amount');
-            $table->float('bonus')->default(0);
-            $table->float('gstValue')->default(0);
             $table->date('date');
             $table->foreignId('unitID')->constrained('units', 'id');
             $table->float('unitValue');

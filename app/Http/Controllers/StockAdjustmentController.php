@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\products;
+use App\Models\rawMaterial;
 use App\Models\stock;
 use App\Models\stockAdjustment;
 use App\Models\units;
@@ -17,7 +18,7 @@ class StockAdjustmentController extends Controller
     public function index()
     {
         $adjustments = stockAdjustment::orderBy('id', 'desc')->get();
-        $products = products::all();
+        $products = rawMaterial::all();
         $units = units::all();
 
         return view('stock.adjustment.index', compact('adjustments', 'products', 'units'));
@@ -45,7 +46,7 @@ class StockAdjustmentController extends Controller
             $qty = $request->qty * $unit->value;
             stockAdjustment::create(
                 [
-                    'productID' => $request->productID,
+                    'rawID' => $request->productID,
                     'unitID'    => $request->unitID,
                     'unitValue' => $unit->value,
                     'date'      => $request->date,

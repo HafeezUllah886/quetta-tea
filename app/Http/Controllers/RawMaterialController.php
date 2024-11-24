@@ -88,4 +88,11 @@ class RawMaterialController extends Controller
     {
         //
     }
+
+    public function getMaterial($id)
+    {
+        $material = rawMaterial::find($id);
+
+        return $material;
+    }
 }

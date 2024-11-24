@@ -10,9 +10,9 @@ class purchase_details extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function product()
+    public function material()
     {
-        return $this->belongsTo(products::class, 'productID');
+        return $this->belongsTo(rawMaterial::class, 'rawID');
     }
 
     public function unit()
