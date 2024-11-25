@@ -4,7 +4,7 @@
        <div class="col-12">
               <div class="card">
                      <div class="card-header d-flex justify-content-between">
-                            <h3>Product Units</h3>
+                            <h3>Raw Material Units</h3>
                             <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create New</button>
                      </div>
                      <div class="card-body">
@@ -29,7 +29,7 @@
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="myModalLabel">Edit Unit - Product</h5>
+                                                                    <h5 class="modal-title" id="myModalLabel">Edit Unit</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                                                                 </div>
                                                                 <form action="{{ route('units.update', $unit->id) }}" method="Post">
@@ -66,7 +66,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Create New Unit - Product</h5>
+                <h5 class="modal-title" id="myModalLabel">Create New Unit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <form action="{{ route('units.store') }}" method="post">

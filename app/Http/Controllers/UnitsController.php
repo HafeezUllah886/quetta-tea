@@ -14,7 +14,7 @@ class UnitsController extends Controller
     {
         $units = units::all();
 
-        return view('products.units', compact('units'));
+        return view('rawMaterial.units', compact('units'));
     }
 
     /**

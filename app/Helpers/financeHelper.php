@@ -19,7 +19,7 @@ function createTransaction($accountID, $date, $cr, $db, $notes, $ref){
 }
 
 function createUserTransaction($userID, $date, $cr, $db, $notes, $ref){
-    transactions::create(
+    users_transactions::create(
         [
             'userID' => $userID,
             'date' => $date,

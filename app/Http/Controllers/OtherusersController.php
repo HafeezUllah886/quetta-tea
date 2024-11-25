@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\users_transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,11 @@ class OtherusersController extends Controller
                 'password'  => Hash::make($request->password),
             ]
         );
+        $ref = getRef();
+        if($request->has('initial'))
+        {
+            createUserTransaction($user->id, now(), $request->initial, 0, "Initail Balance", $ref);
+        }
         DB::commit();
         return back()->with('success', 'User Created');
     }
@@ -56,6 +62,24 @@ class OtherusersController extends Controller
     }
 
 
+    }
+
+    public function show($id, $from, $to)
+    {
+        $user = User::find($id);
+
+        $transactions = users_transactions::where('userID', $id)->whereBetween('date', [$from, $to])->get();
+
+        $pre_cr = users_transactions::where('userID', $id)->whereDate('date', '<', $from)->sum('cr');
+        $pre_db = users_transactions::where('userID', $id)->whereDate('date', '<', $from)->sum('db');
+        $pre_balance = $pre_cr - $pre_db;
+
+        $cur_cr = users_transactions::where('userID', $id)->sum('cr');
+        $cur_db = users_transactions::where('userID', $id)->sum('db');
+
+        $cur_balance = $cur_cr - $cur_db;
+
+        return view('users.statment', compact('user', 'transactions', 'pre_balance', 'cur_balance', 'from', 'to'));
     }
 
     public function update(request $request, $id)

@@ -104,9 +104,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('categories.index') }}" class="nav-link" data-key="t-chat"> Categories </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="{{ route('items.show', 'all') }}" class="nav-link" data-key="t-chat"> Price List </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
@@ -151,10 +151,10 @@
                                 <a href="{{ route('deposit_withdraw.index') }}" class="nav-link"
                                     data-key="t-input-masks">Deposit / Withdraw</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="{{ route('receivings.index') }}" class="nav-link"
                                     data-key="t-input-masks">Payment Receiving</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item">
                                 <a href="{{ route('transfers.index') }}" class="nav-link"
                                     data-key="t-advanced">Transfer</a>

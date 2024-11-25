@@ -15,7 +15,7 @@ class CategoriesController extends Controller
     {
         $cats = categories::orderBy('name', 'asc')->get();
 
-        return view('products.categories', compact('cats'));
+        return view('items.categories', compact('cats'));
     }
 
     /**

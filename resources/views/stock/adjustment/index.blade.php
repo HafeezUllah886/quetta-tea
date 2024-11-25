@@ -59,7 +59,7 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mt-2">
-                            <label for="product">Product</label>
+                            <label for="product">Raw Material</label>
                             <select name="productID" id="product" required class="selectize">
                                 <option value=""></option>
                                 @foreach ($products as $product)

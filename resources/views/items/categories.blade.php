@@ -4,7 +4,7 @@
        <div class="col-12">
               <div class="card">
                      <div class="card-header d-flex justify-content-between">
-                            <h3>Product Categories</h3>
+                            <h3>Menu Items Categories</h3>
                             <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create New</button>
                      </div>
                      <div class="card-body">
