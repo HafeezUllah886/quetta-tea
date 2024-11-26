@@ -227,6 +227,11 @@
                         <i class="ri-knife-blood-line"></i> <span data-key="t-apps">Kitchens</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('tables.index') }}" >
+                        <i class="ri-t-box-line"></i> <span data-key="t-apps">Tables</span>
+                    </a>
+                </li>
 
                 @endif
             </ul>
