@@ -24,7 +24,6 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-
         $start = $request->start ?? now()->toDateString();
         $end = $request->end ?? now()->toDateString();
 

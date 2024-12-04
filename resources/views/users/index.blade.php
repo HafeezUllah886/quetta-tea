@@ -8,7 +8,7 @@
                             <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create New</button>
                      </div>
                      @php
-                     $types = ['Store Keeper', 'Kitchen'];
+                     $types = ['Store Keeper', 'Kitchen', 'Chef'];
                  @endphp
                      <div class="card-body">
                             <table class="table">
@@ -45,14 +45,14 @@
                                                                               </button>
                                                                           </li>
                                                                           @endif
-                                                                          
+
                                                                           <li>
                                                                               <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_{{$user->id}}">
                                                                                   <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                                                   Edits
                                                                               </a>
                                                                           </li>
-                                                                          
+
                                                                       </ul>
                                                                   </div>
                                                         </td>
@@ -72,10 +72,13 @@
                                                                                     <label for="name">Name</label>
                                                                                     <input type="text" name="name" value="{{$user->name}}" required id="name" class="form-control">
                                                                              </div>
+                                                                             @if ($type != "Chef")
                                                                              <div class="form-group mt-2">
-                                                                                    <label for="password">Password</label>
-                                                                                    <input type="password" name="password" id="password" autocomplete="false" class="form-control">
-                                                                             </div>
+                                                                                <label for="password">Password</label>
+                                                                                <input type="password" name="password" id="password" autocomplete="false" class="form-control">
+                                                                            </div>
+                                                                             @endif
+
                                                                          </div>
                                                                          <div class="modal-footer">
                                                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -108,10 +111,12 @@
                                    <label for="name">Name</label>
                                    <input type="text" name="name" required id="name" class="form-control">
                             </div>
+                            @if ($type != "Chef")
                             <div class="form-group mt-2">
                                    <label for="password">Password</label>
                                    <input type="password" name="password" required id="password" class="form-control">
                             </div>
+                            @endif
                             @if (!in_array($type, $types))
                                    <div class="form-group mt-2">
                                           <label for="initial">Initial Balance</label>

@@ -16,6 +16,11 @@ class rawMaterial extends Model
         return $this->belongsTo(units::class, 'unitID');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(raw_categories::class, 'catID');
+    }
+
     public function purchaseDetails()
     {
         return $this->hasMany(purchase_details::class, 'materialID');

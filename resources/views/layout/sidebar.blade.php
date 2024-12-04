@@ -56,7 +56,6 @@
             </div>
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                @if (auth()->user()->role == "Admin")
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#purchase" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
@@ -104,9 +103,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('categories.index') }}" class="nav-link" data-key="t-chat"> Categories </a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a href="{{ route('items.show', 'all') }}" class="nav-link" data-key="t-chat"> Price List </a>
-                            </li> --}}
+
                         </ul>
                     </div>
                 </li>
@@ -122,6 +119,9 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('units.index') }}" class="nav-link" data-key="t-chat"> Units </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('rawcategories.index') }}" class="nav-link" data-key="t-chat"> Categories </a>
                             </li>
                         </ul>
                     </div>
@@ -228,12 +228,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('otherusers.index', ['Chef']) }}" >
+                        <i class="ri-user-star-fill"></i> <span data-key="t-apps">Chef</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('tables.index') }}" >
                         <i class="ri-t-box-line"></i> <span data-key="t-apps">Tables</span>
                     </a>
                 </li>
-
-                @endif
             </ul>
         </div>
         <!-- Sidebar -->

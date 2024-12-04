@@ -117,7 +117,16 @@
         </header>
 
         <!-- ========== App Menu ========== -->
-        @include('layout.sidebar')
+        @if (Auth()->user()->role == "Admin")
+            @include('layout.sidebar')
+        @endif
+        @if (Auth()->user()->role == "Store Keeper")
+            @include('layout.storekeepersidebar')
+        @endif
+        @if (Auth()->user()->role == "Cashier")
+            @include('layout.cashiersidebar')
+        @endif
+
         <!-- Left Sidebar End -->
         <!-- Vertical Overlay-->
         <div class="vertical-overlay"></div>

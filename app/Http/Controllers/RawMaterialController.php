@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\raw_categories;
 use App\Models\rawMaterial;
 use App\Models\units;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class RawMaterialController extends Controller
     {
         $items = rawMaterial::all();
         $units = units::all();
-        return view('rawMaterial.index', compact('items', 'units'));
+        $cats = raw_categories::all();
+        return view('rawMaterial.index', compact('items', 'units', 'cats'));
     }
 
     /**

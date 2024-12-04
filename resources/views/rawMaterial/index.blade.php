@@ -23,6 +23,7 @@
                         <thead>
                             <th>#</th>
                             <th>Name</th>
+                            <th>Category</th>
                             <th>Unit</th>
                             <th>Price</th>
                             <th>Action</th>
@@ -32,6 +33,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->category->name }}</td>
                                     <td>{{ $item->unit->name }}</td>
                                     <td>{{ $item->price }}</td>
                                     <td>
@@ -57,6 +59,14 @@
                                                         <input type="text" name="name" required
                                                             value="{{ $item->name }}" id="name"
                                                             class="form-control">
+                                                    </div>
+                                                    <div class="form-group mt-2">
+                                                        <label for="catID">Category</label>
+                                                        <select name="catID" id="catID" class="form-control">
+                                                            @foreach ($cats as $cat)
+                                                                <option value="{{ $cat->id }}" @selected($cat->id == $item->catID)>{{ $cat->name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     <div class="form-group mt-2">
                                                         <label for="unit">Unit</label>
@@ -108,6 +118,14 @@
                                 <div class="form-group">
                                     <label for="name">Name</label>
                                     <input type="text" name="name" required id="name" class="form-control">
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="catID">Category</label>
+                                    <select name="catID" id="catID" class="form-control">
+                                        @foreach ($cats as $cat)
+                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group mt-2">
                                     <label for="unit">Unit</label>

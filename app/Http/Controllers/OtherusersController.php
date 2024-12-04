@@ -12,7 +12,7 @@ class OtherusersController extends Controller
 {
     public function index($type)
     {
-        $checks = ['Waiter','Kitchen', 'Cashier', 'Customer', 'Store Keeper'];
+        $checks = ['Waiter','Kitchen', 'Cashier', 'Customer', 'Store Keeper', 'Chef'];
         if(!in_array($type, $checks))
         {
             return back()->with('error', 'Invalid Request');
@@ -44,7 +44,7 @@ class OtherusersController extends Controller
             [
                 'name'      => $request->name,
                 'role'      => $type,
-                'password'  => Hash::make($request->password),
+                'password'  => Hash::make($request->password ?? rand(11111111,99999999)),
             ]
         );
         $ref = getRef();
@@ -110,7 +110,7 @@ class OtherusersController extends Controller
                 [
                     'password'  => Hash::make($request->password),
                 ]
-            );  
+            );
         }
         DB::commit();
         return back()->with('success', 'User Updated');

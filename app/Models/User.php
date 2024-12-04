@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $query->where('role', 'Kitchen');
     }
+
+    public function scopeChefs($query)
+    {
+        return $query->where('role', 'Chef');
+    }
 }

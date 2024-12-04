@@ -41,13 +41,18 @@ class userSeeder extends Seeder
         ]);
         User::create([
             'name' => "Walk-In Customer",
-            'password' => Hash::make("customer"),
+            'password' => Hash::make(rand(111111111,999999999)),
             'role' => 'Customer',
         ]);
         User::create([
             'name' => "Customer",
             'password' => Hash::make("customer"),
             'role' => 'Customer',
+        ]);
+        User::create([
+            'name' => "Defaut Chef",
+            'password' => Hash::make(rand(111111111,999999999)),
+            'role' => 'Chef',
         ]);
     }
 }

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
        $this->call(userSeeder::class);
        $this->call(units_seeder::class);
        $this->call(categorySeeder::class);
+       $this->call(rawcategorySeeder::class);
        $this->call(rawMaterialSeeder::class);
        $this->call(itemsSeeder::class);
        $this->call(accountSeeder::class);

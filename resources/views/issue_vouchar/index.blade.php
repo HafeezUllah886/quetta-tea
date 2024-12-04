@@ -23,7 +23,7 @@
             </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Sales</h3>
+                    <h3>Issue Vouchars</h3>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -39,27 +39,18 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>Customer</th>
+                            <th>Kitchen</th>
+                            <th>Chef</th>
                             <th>Date</th>
-                            <th>Amount</th>
-                            {{-- <th>Paid</th>
-                            <th>Due</th> --}}
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            @foreach ($sales as $key => $sale)
-                                @php
-                                    $amount = $sale->net;
-                                    $paid = $sale->payments->sum('amount');
-                                    $due = $amount - $paid;
-                                @endphp
+                            @foreach ($vouchars as $key => $vouchar)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $sale->customer->title }}</td>
-                                    <td>{{ date('d M Y', strtotime($sale->date)) }}</td>
-                                    <td>{{ number_format($amount) }}</td>
-                                   {{--  <td>{{ number_format($paid) }}</td>
-                                    <td>{{ number_format($due) }}</td> --}}
+                                    <td>{{ $vouchar->kitchen->name }}</td>
+                                    <td>{{ $vouchar->chef->name }}</td>
+                                    <td>{{ date('d M Y', strtotime($vouchar->date)) }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -68,33 +59,20 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
-                                                    <button class="dropdown-item" onclick="newWindow('{{route('sale.show', $sale->id)}}')"
+                                                    <button class="dropdown-item" onclick="newWindow('{{route('issuevauchar.show', $vouchar->id)}}')"
                                                         onclick=""><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                         View
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <button class="dropdown-item" onclick="newWindow('{{route('sale.gatePass', $sale->id)}}')"
-                                                        onclick=""><i
-                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                        Gate Pass
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" onclick="newWindow('{{route('sale.edit', $sale->id)}}')">
+                                                    <a class="dropdown-item" onclick="newWindow('{{route('issuevauchar.edit', $vouchar->id)}}')">
                                                         <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                         Edit
                                                     </a>
                                                 </li>
-                                               {{--  <li>
-                                                    <a class="dropdown-item" onclick="newWindow('{{route('salePayment.index', $sale->id)}}')">
-                                                        <i class="ri-money-dollar-circle-fill align-bottom me-2 text-muted"></i>
-                                                        Payments
-                                                    </a>
-                                                </li> --}}
                                                 <li>
-                                                    <a class="dropdown-item text-danger" href="{{route('sale.delete', $sale->id)}}">
+                                                    <a class="dropdown-item text-danger" href="{{route('vouchars.delete', $vouchar->id)}}">
                                                         <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
                                                         Delete
                                                     </a>

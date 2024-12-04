@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\sale_details;
+use App\Models\bills;
 use Illuminate\Http\Request;
 
-class SaleDetailsController extends Controller
+class BillsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class SaleDetailsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(sale_details $sale_details)
+    public function show(bills $bills)
     {
         //
     }
@@ -42,7 +42,7 @@ class SaleDetailsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(sale_details $sale_details)
+    public function edit(bills $bills)
     {
         //
     }
@@ -50,7 +50,7 @@ class SaleDetailsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, sale_details $sale_details)
+    public function update(Request $request, bills $bills)
     {
         //
     }
@@ -58,7 +58,7 @@ class SaleDetailsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(sale_details $sale_details)
+    public function destroy(bills $bills)
     {
         //
     }
