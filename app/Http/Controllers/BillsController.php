@@ -100,7 +100,6 @@ class BillsController extends Controller
         $sizeID = $request->$sizeName;
 
         $size = sizes::find($sizeID);
-
         return response()->json(
             [
                 'itemname' => $size->item->name,
@@ -109,7 +108,9 @@ class BillsController extends Controller
                 'sizeid' => $sizeID,
                 'price' => $size->price,
                 'dprice' => $size->dprice,
-                'image' => $size->item->img
+                'image' => $size->item->img,
+                'qty' => $request->qty,
+                'time' => time(),
             ]
         );
     }

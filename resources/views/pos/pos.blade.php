@@ -101,7 +101,7 @@
                                                         <div class="fs-4 fw-semibold mb-2">{{$item->name}}</div>
                                                         <div class="d-flex mb-3">
                                                             <span class="btn btn-secondary" onclick="subQty('qtymod_{{$item->id}}')"><i class="fa fa-minus"></i></span>
-                                                            <input type="number" class="form-control w-50px fw-bold mx-2 text-center" min="1" id="qtymod_{{$item->id}}" name="qty" value="1">
+                                                            <input type="number" class="form-control w-50px fw-bold mx-2 text-center" min="1" id="qqtymod_{{$item->id}}" name="qty" value="1">
                                                             <span class="btn btn-secondary" onclick="addQty('qtymod_{{$item->id}}')"><i class="fa fa-plus"></i></span>
                                                         </div>
                                                         <hr class="opacity-1">
@@ -120,6 +120,21 @@
                                                                 @endforeach
                                                             </div>
                                                         </div>
+
+                                                        @if ($item->dealItems->isNotEmpty())
+                                                            <div class="mb-2">
+                                                                <div class="fw-bold">Added Items:</div>
+                                                                <div class="option-list">
+                                                                    @foreach ($item->dealItems as $deal)
+                                                                    <div class="option">
+                                                                        <label class="option-label" for="addon1">
+                                                                            <span class="option-text">{{$deal->material->name}}</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        @endif
 
                                                         <hr class="opacity-1">
                                                         <div class="row">
@@ -163,7 +178,7 @@
 							<div class="pos-sidebar-nav small">
 								<ul class="nav nav-tabs nav-fill">
 									<li class="nav-item">
-										<a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#newOrderTab">New Order (5)</a>
+										<a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#newOrderTab">New Order (<span class="itemsQty">0</span>)</a>
 									</li>
 									<li class="nav-item">
 										<a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#orderHistoryTab">Order History (0)</a>
@@ -202,17 +217,9 @@
 							<!-- BEGIN pos-sidebar-footer -->
 							<div class="pos-sidebar-footer">
 								<div class="d-flex align-items-center mb-2">
-									<div>Subtotal</div>
-									<div class="flex-1 text-end h6 mb-0">$30.98</div>
-								</div>
-								<div class="d-flex align-items-center">
-									<div>Taxes (6%)</div>
-									<div class="flex-1 text-end h6 mb-0">$2.12</div>
-								</div>
-								<hr class="opacity-1 my-10px">
-								<div class="d-flex align-items-center mb-2">
 									<div>Total</div>
-									<div class="flex-1 text-end h4 mb-0">$33.10</div>
+									<div class="flex-1 text-end h4 mb-0" id="totalplace">0.00</div>
+                                    <input type="hidden" name="total" id="total">
 								</div>
 								<div class="mt-3">
 									<div class="d-flex">
@@ -248,7 +255,7 @@
 			<!-- BEGIN pos-mobile-sidebar-toggler -->
 			<a href="#" class="pos-mobile-sidebar-toggler" data-toggle-class="pos-mobile-sidebar-toggled" data-toggle-target="#pos">
 				<i class="fa fa-shopping-bag"></i>
-				<span class="badge">5</span>
+				<span class="badge itemsQty">0</span>
 			</a>
 			<!-- END pos-mobile-sidebar-toggler -->
 		</div>
@@ -326,22 +333,23 @@
 <script>
      function addQty(id)
     {
-        var qty = parseFloat($("#"+id).val());
+        console.log(id);
+        var qty = parseFloat($("#q"+id).val());
         var qty1 = qty + 1;
-
-            $("#"+id).val(qty1);
-
-
-
+        $("#q"+id).val(qty1);
+        updateQty(id.replace('cartqty_', ''));
     }
     function subQty(id)
     {
-        var qty = parseFloat($("#"+id).val());
+        console.log(id);
+        var qty = parseFloat($("#q"+id).val());
         var qty1 = qty - 1;
         if(qty1 >= 1)
         {
-            $("#"+id).val(qty1);
+            $("#q"+id).val(qty1);
+            updateQty(id.replace('cartqty_', ''));
         }
+
 
     }
 
@@ -351,38 +359,74 @@
         $("#modalPosItem_"+id).modal('hide');
 
         var data = $("#form_"+id).serialize();
-        console.warn(data);
         $.ajax({
                 url: "{{ url('/bill/addtocart') }}",
                 method: "GET",
                 data: data,
                 success: function(response) {
-                    console.log(response);
+                    var cartHTML = "";
+                    var image = "{{asset('')}}" + response.image;
+                    var amount = response.qty * response.price;
+                    var time = response.time;
+                    var qtyID = "cartqty_" + time;
+                    cartHTML += '<div class="pos-order" id="row_'+time+'">';
+						cartHTML += '<div class="pos-order-product">';
+							cartHTML += '<div class="img" style="background-image: url('+image+')"></div>';
+							cartHTML += '<div class="flex-1">';
+								cartHTML += '<div class="h6 mb-1">'+response.itemname+'</div>';
+                                cartHTML += '<div class="small">- Size: '+response.sizename+'</div>';
+								cartHTML += '<div class="small">- Price: '+response.price+'</div>';
+								cartHTML += '<div class="d-flex">';
+								    cartHTML += '<span onclick="subQty(`:qtid`)" class="btn btn-secondary btn-sm"><i class="fa fa-minus"></i></span>'.replace(':qtid', qtyID);
+									cartHTML += '<input type="number" class="form-control w-50px form-control-sm mx-2 bg-white bg-opacity-25 bg-white bg-opacity-25 text-center" name="qty[]" oninput="updateQty('+time+')" id="q'+qtyID+'" value="'+response.qty+'">';
+									cartHTML += '<span onclick="addQty(`:qtid`)" class="btn btn-secondary btn-sm"><i class="fa fa-plus"></i></span>'.replace(':qtid', qtyID);
+								cartHTML += '</div>';
+							cartHTML += '</div>';
+						cartHTML += '</div>';
+						cartHTML += '<div class="pos-order-price d-flex flex-column">';
+							cartHTML += '<div class="flex-1" id="amountplace_'+time+'">'+amount+'</div>';
+							cartHTML += '<div class="text-end">';
+								cartHTML += '<span onclick="deleteRow('+time+')" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></span>';
+							cartHTML += '</div>';
+						cartHTML += '</div>';
+                        cartHTML += '<input type="hidden" name="item[]" value="'+response.itemid+'">';
+                        cartHTML += '<input type="hidden" name="size[]" value="'+response.sizeid+'">';
+                        cartHTML += '<input type="hidden" id="price_'+time+'" value="'+response.price+'">';
+                        cartHTML += '<input type="hidden" id="amount_'+time+'" name="amount[]" value="'+amount+'">';
+                        cartHTML += '</div>';
 
-                    <div class="pos-order">
-										<div class="pos-order-product">
-											<div class="img" style="background-image: url(assets/img/pos/product-2.jpg)"></div>
-											<div class="flex-1">
-												<div class="h6 mb-1">Grill Pork Chop</div>
-												<div class="small">$12.99</div>
-												<div class="small mb-2">- size: large</div>
-												<div class="d-flex">
-													<a href="#" class="btn btn-secondary btn-sm"><i class="fa fa-minus"></i></a>
-													<input type="text" class="form-control w-50px form-control-sm mx-2 bg-white bg-opacity-25 bg-white bg-opacity-25 text-center" value="01">
-													<a href="#" class="btn btn-secondary btn-sm"><i class="fa fa-plus"></i></a>
-												</div>
-											</div>
-										</div>
-										<div class="pos-order-price d-flex flex-column">
-											<div class="flex-1">$12.99</div>
-											<div class="text-end">
-												<a href="#" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></a>
-											</div>
-										</div>
-									</div>
+                    $("#newOrderTab").append(cartHTML);
+                    updateTotal();
                 }
             });
     }
+
+    function updateQty(id) {
+            var qty = $("#qcartqty_"+id).val();
+            var amount = qty * ($("#price_" + id).val());
+            $("#amount_" + id).val(amount.toFixed(2));
+            $("#amountplace_" + id).html(amount.toFixed(2));
+            updateTotal();
+        }
+
+        function updateTotal() {
+            var total = 0;
+            $("input[id^='amount_']").each(function() {
+                var inputId = $(this).attr('id');
+                var inputValue = $(this).val();
+                total += parseFloat(inputValue);
+            });
+            $("#totalplace").html(total);
+            $("#total").val(total);
+
+            var count = $("[id^='row_']").length;
+            $(".itemsQty").html(count);
+        }
+
+        function deleteRow(id) {
+            $("#row_" + id).remove();
+            updateTotal();
+        }
 
 </script>
 </body>
