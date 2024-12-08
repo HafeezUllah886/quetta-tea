@@ -85,6 +85,37 @@
 
                                     </tbody>
                                 </table>
+
+                                <div class="card-header d-flex justify-content-between">
+                                    <h5>Deal Beverages</h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10 ">
+                                        <select class="selectize" id="raw">
+                                           @foreach ($materials as $raw)
+                                               <option value="{{$raw->id}}" data-name="{{$raw->name}}">{{$raw->name}}</option>
+                                           @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="w-100 btn btn-success" type="button" onclick="addRaw()">+</button>
+                                    </div>
+                                </div>
+                                <table  class="w-100 table">
+                                    <thead>
+                                        <th>Item Name</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody id="raws">
+                                        @foreach ($item->dealItems as $raw)
+                                            <tr class="p-0" id="rowRaw_{{$raw->rawID}}">
+                                                <td width="90%" class="p-0">{{$raw->material->name}}</td>
+                                                <td class="p-0"> <span class="btn btn-sm btn-danger" onclick="deleteRowRaw({{$raw->rawID}})">X</span></td>
+                                                <input type="hidden" name="rawID[]" value="{{$raw->rawID}}">
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
 
                         </div>
@@ -103,9 +134,15 @@
 
 @endsection
 
+@section('page-css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/selectize/selectize.min.css') }}">
+@endsection
+
 @section('page-js')
+<script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
 
     <script>
+        $(".selectize").selectize();
         var optionCount = <?php echo json_encode($item->sizes->count()); ?>;
         function addOption() {
             optionCount += 1;
@@ -119,6 +156,23 @@
         }
         function deleteRow(optionCount) {
             $('#row_' + optionCount).remove();
+        }
+
+        function addRaw() {
+            var selectizeInstance = $("#raw")[0].selectize; // Access the Selectize instance
+            var raw_id = selectizeInstance.getValue(); // Get the selected value (from the 'value' attribute)
+            var raw_name = selectizeInstance.options[raw_id]?.name; // Access the data-name equivalent
+
+            var html = '<tr class="p-0" id="rowRaw_' + raw_id + '">';
+            html += '<td width="90%" class="p-0">'+raw_name+'</td>';
+            html += '<td class="p-0"> <span class="btn btn-sm btn-danger" onclick="deleteRowRaw(' + raw_id + ')">X</span></td>';
+            html += '<input type="hidden" name="rawID[]" value="'+raw_id+'">';
+            html += '</tr>';
+
+            $("#raws").append(html);
+        }
+        function deleteRowRaw(optionCount) {
+            $('#rowRaw_' + optionCount).remove();
         }
 
         $("#img").change(function () {

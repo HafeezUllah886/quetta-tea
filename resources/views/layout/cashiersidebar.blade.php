@@ -57,72 +57,19 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#issue" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link" href="#pos" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-shopping-cart-line"></i><span data-key="t-apps">Issue Vouchar</span>
+                        <i class="ri-shopping-cart-line"></i><span data-key="t-apps">POS</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="issue">
+                    <div class="collapse menu-dropdown" id="pos">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a onclick="newWindow('{{ route('issuevauchar.create') }}')" class="nav-link"
-                                    data-key="t-chat">Create Vouchar</a>
+                                <a onclick="newWindow('{{ route('bills.create') }}')" class="nav-link"
+                                    data-key="t-chat">Create Bill</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('issuevauchar.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Vouchar
+                                <a href="{{ route('issuevauchar.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Bills
                                     History </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#purchase" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-shopping-cart-line"></i><span data-key="t-apps">Purchase</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="purchase">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a onclick="newWindow('{{ route('purchase.create') }}')" class="nav-link"
-                                    data-key="t-chat">Create Purchase</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('purchase.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Purchase
-                                    History </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#stock" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-stack-line"></i><span data-key="t-apps">Stocks</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="stock">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('stock.index') }}" class="nav-link" data-key="t-chat">Raw Material Stock</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('stockAdjustments.index') }}" class="nav-link" data-key="t-chat">Stock Adjustment</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#raw_material" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Raw Material</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="raw_material">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('raw_material.index') }}" class="nav-link" data-key="t-chat">Material List </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('units.index') }}" class="nav-link" data-key="t-chat"> Units </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('rawcategories.index') }}" class="nav-link" data-key="t-chat"> Categories </a>
                             </li>
                         </ul>
                     </div>

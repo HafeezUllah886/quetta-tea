@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\categories;
+use App\Models\item_beverages;
 use App\Models\items;
+use App\Models\rawMaterial;
 use App\Models\sizes;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\gd\Driver;
 
-use Illuminate\Support\Str;
 
 class ItemsController extends Controller
 {
@@ -33,7 +33,8 @@ class ItemsController extends Controller
     {
         $cats = categories::orderBy('name', 'asc')->get();
         $kitchens = User::Kitchens()->get();
-        return view('items.create', compact('cats', 'kitchens'));
+        $materials = rawMaterial::where('catID', 2)->get();
+        return view('items.create', compact('cats', 'kitchens', 'materials'));
     }
 
     /**
@@ -49,8 +50,10 @@ class ItemsController extends Controller
             'name.unique' => "Item already Existing",
             ]
         );
-
-        $filePath = null;
+        try
+        {
+            DB::beginTransaction();
+            $filePath = null;
 
         if ($request->hasFile('img')) {
 
@@ -99,8 +102,31 @@ class ItemsController extends Controller
                 ]
             );
         }
+        if($request->has('rawID'))
+        {
+            $beverages = $request->rawID;
 
+            foreach($beverages as $key => $beverage)
+            {
+                item_beverages::create(
+                    [
+                        'itemID' => $item->id,
+                        'rawID' => $beverage,
+                    ]
+                );
+            }
+        }
+
+        DB::commit();
         return back()->with('success', 'Product Created');
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->with('error', $e->getMessage());
+        }
+
+
     }
 
     /**
@@ -118,7 +144,8 @@ class ItemsController extends Controller
         $item = items::find($id);
         $cats = categories::orderBy('name', 'asc')->get();
         $kitchens = User::Kitchens()->get();
-        return view('items.edit', compact('cats', 'kitchens', 'item'));
+        $materials = rawMaterial::where('catID', 2)->get();
+        return view('items.edit', compact('cats', 'kitchens', 'item', 'materials'));
 
     }
 
@@ -135,6 +162,9 @@ class ItemsController extends Controller
             'name.unique' => "Item already Existing",
             ]
         );
+        try
+        {
+            DB::beginTransaction();
 
         $item = items::find($id);
 
@@ -149,6 +179,10 @@ class ItemsController extends Controller
         foreach($item->sizes as $option)
         {
             $option->delete();
+        }
+        foreach($item->dealItems as $raw)
+        {
+            $raw->delete();
         }
         $options = $request->title;
 
@@ -202,9 +236,29 @@ class ItemsController extends Controller
             );
         }
 
+        $beverages = $request->rawID;
 
-
+        foreach($beverages as $key => $beverage)
+        {
+            item_beverages::create(
+                [
+                    'itemID' => $item->id,
+                    'rawID' => $beverage,
+                ]
+            );
+        }
+        DB::commit();
         return back()->with('success', 'Item Updated');
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->with('error', $e->getMessage());
+        }
+
+
+
+
     }
 
     /**

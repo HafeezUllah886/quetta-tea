@@ -24,4 +24,9 @@ class items extends Model
     {
         return $this->hasMany(sizes::class, 'itemID');
     }
+
+    public function dealItems()
+    {
+        return $this->hasMany(item_beverages::class, 'itemID');
+    }
 }

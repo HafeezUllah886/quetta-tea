@@ -9,4 +9,9 @@ class sizes extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function item()
+    {
+        return $this->belongsTo(items::class, 'itemID');
+    }
 }

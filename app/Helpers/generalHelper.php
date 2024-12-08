@@ -138,14 +138,14 @@ function calculateGrowthPercentage($oldValue, $newValue) {
 
 function projectNameAuth()
 {
-    return "Quetta Tea 4 You";
+    return "QUETTA BAITHAK RESTAURANT";
 }
 
 function projectNameHeader()
 {
-    return "QUETTA TEA 4 YOU";
+    return "Quetta Baithak Restaurant";
 }
 function projectNameShort()
 {
-    return "QT";
+    return "QBR";
 }

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\accounts;
 use App\Models\bills;
+use App\Models\categories;
+use App\Models\items;
+use App\Models\sizes;
 use Illuminate\Http\Request;
 
 class BillsController extends Controller
@@ -12,7 +16,8 @@ class BillsController extends Controller
      */
     public function index()
     {
-        //
+        $bills = bills::all();
+        return view('pos.index', compact('bills'));
     }
 
     /**
@@ -20,7 +25,11 @@ class BillsController extends Controller
      */
     public function create()
     {
-        //
+        $items = items::where('status', 'Active')->get();
+        $categories = categories::all();
+        $customers = accounts::Customer()->get();
+
+        return view('pos.pos', compact('items', 'categories', 'customers'));
     }
 
     /**
@@ -61,5 +70,47 @@ class BillsController extends Controller
     public function destroy(bills $bills)
     {
         //
+    }
+
+    public function allItems()
+    {
+        $items = items::where('status', 'Active')->get();
+        return response()->json(
+            [
+                'items' => $items,
+            ]
+        );
+    }
+
+    public function bycategory($id)
+    {
+        $items = items::where('catID', $id)->where('status', 'Active')->orderBy('name', 'asc')->get();
+
+        return response()->json(
+            [
+                'items' => $items,
+            ]
+        );
+    }
+
+    public function addtocart(request $request)
+    {
+        $product = $request->itemID;
+        $sizeName = "size$product";
+        $sizeID = $request->$sizeName;
+
+        $size = sizes::find($sizeID);
+
+        return response()->json(
+            [
+                'itemname' => $size->item->name,
+                'itemid' => $product,
+                'sizename' => $size->title,
+                'sizeid' => $sizeID,
+                'price' => $size->price,
+                'dprice' => $size->dprice,
+                'image' => $size->item->img
+            ]
+        );
     }
 }

@@ -20,6 +20,7 @@ require __DIR__ . '/stock.php';
 require __DIR__ . '/issuevauchar.php';
 require __DIR__ . '/reports.php';
 require __DIR__ . '/otherusers.php';
+require __DIR__ . '/bill.php';
 
 Route::middleware('auth')->group(function () {
 
