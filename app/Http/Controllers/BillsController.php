@@ -37,8 +37,9 @@ class BillsController extends Controller
         $customers = accounts::Customer()->get();
         $waiters = User::Waiters()->get();
         $tables = tables::where('status', 'Active')->get();
+        $orders = bills::where('status', 'Active')->get();
 
-        return view('pos.pos', compact('items', 'categories', 'customers', 'waiters', 'tables'));
+        return view('pos.pos', compact('items', 'categories', 'customers', 'waiters', 'tables', 'orders'));
     }
 
     /**
@@ -70,6 +71,7 @@ class BillsController extends Controller
                 bill_details::create(
                     [
                         'billID'        => $bill->id,
+                        'itemID'        => $request->item[$key],
                         'sizeID'        => $request->size[$key],
                         'price'         => $request->price[$key],
                         'qty'           => $request->qty[$key],
@@ -110,9 +112,13 @@ class BillsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        dd($request);
+        $bill = bills::find($id);
+        $bill->status = "Completed";
+        $bill->save();
+
+        return view('pos.print', compact('bill'));
     }
 
     /**

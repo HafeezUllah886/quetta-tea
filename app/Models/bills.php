@@ -12,4 +12,15 @@ class bills extends Model
     {
         return $this->hasMany(bill_details::class, 'billID');
     }
+
+    public function table()
+    {
+        return $this->belongsTo(tables::class, 'tableID');
+    }
+    public function waiter()
+    {
+        return $this->belongsTo(User::class, 'waiterID');
+    }
+
+
 }

@@ -70,31 +70,36 @@
 <body>
     <div class="main" id="main">
         <div style="text-align: center;">
-            {{-- <img style="width:100%;margin:0 auto;height:100px;" src="{{ asset('assets/images/header.jpg') }}" alt=""> --}}
-            <h2 class="text-center" style="margin: 0">QUETTA MART & PHARMACY</h2>
+            <img style="margin:0 auto;height:200px;" src="{{ asset('assets/images/logo.png') }}" alt="">
+            <h2 class="text-center" style="margin: 0">QUETTA BAITHAK RESTAURANT</h2>
             <h3 class="text-center" style="margin: 0">Hana Bypass Nawan Killi Quetta</h3>
-            <h5 class="text-center" style="margin: 0">0335-2665222</h5>
+            <h5 class="text-center" style="margin: 0">+92 324 8967759</h5>
          </div>
         <div class="header">
            {{--  <p class="text-center"><strong>081-2502481</strong></p>
             <p class="text-center"><strong>Fatima Jinnah Road Near Bugti Gali Zarghoon Plaza Quetta</strong></strong></p> --}}
             <div class="area-title">
-                <p class="text-center bg-dark">Sale Receipt</p>
+                <p class="text-center bg-dark">POS Receipt</p>
             </div>
             <table>
                 <tr>
                     <td width="15%">Bill # </td>
-                    <td width="35%"> {{ $invoice->id }}</td>
+                    <td width="35%"> {{ $bill->id }}</td>
                     <td width="15%">Date: </td>
-                    <td width="35%"> {{ date("d-m-Y", strtotime($invoice->date)) }}</td>
-                    {{-- <td width="15%"> Ref # </td>
-                    <td width="55%"> {{ $sale->referenceNo }}</td> --}}
+                    <td width="35%"> {{ date("d-m-Y", strtotime($bill->date)) }}</td>
                 </tr>
                 <tr>
-                    <td width="15%"> Customer: </td>
-                    <td width="55%" colspan="3">
-
-                        {{ $invoice->customer->title }}
+                    <td width="15%"> Waiter: </td>
+                    <td width="35%">
+                        {{ $bill->waiter->name }}
+                    </td>
+                    <td width="15%"> Table: </td>
+                    <td width="35%">
+                        @if($bill->type == "Dine-In")
+                        {{ $bill->table->name }}
+                        @else
+                        {{$bill->type}}
+                        @endif
                     </td>
                 </tr>
             </table>
@@ -113,14 +118,14 @@
                         $items = 0;
                         $qty = 0;
                     @endphp
-                   @foreach ($invoice->details as $item)
+                   @foreach ($bill->details as $item)
                    @php
-                       $total += ($item->price - $item->discount) * $item->qty;
+                       $total += $item->amount;
                        $items += 1;
                        $qty += $item->qty;
                    @endphp
                             <tr>
-                                <td colspan="4" class="uppercase">{{ $item->product->name }} | {{ $item->product->brand }}</td>
+                                <td colspan="4" class="uppercase">{{ $item->size->item->name }} | {{ $item->size->title }}</td>
                             </tr>
                             <tr class="bottom-border">
                                 <td></td>
@@ -134,27 +139,15 @@
                         Item(s) = {{ $items }} |
                         Total Quantity = {{ $qty }}
                     </td>
-                    <td colspan="3" class="text-right" style="font-size: 18px"><strong>{{ number_format($total,0) }}</strong></td>
+                    <td colspan="3" class="text-right" style="font-size: 18px"><strong>{{ number_format($total,2) }}</strong></td>
                    </tr>
-                   <tr>
-                    <td colspan="3" class="text-right">Discount:</td>
-                    <td colspan="3" class="text-right">{{ number_format($invoice->discount,0) }}</td>
-                   </tr>
-                   <tr>
-                    <td colspan="3" class="text-right">Net Amount:</td>
-                    <td colspan="3" class="text-right" style="font-size: 20px"><strong>{{ number_format($total - $invoice->discount, 0) }}</strong></td>
-                   </tr>
+
                 </tbody>
             </table>
         </div>
-        <div class="notes">
-            {{-- <h5>خریدا ہوا مال واپس نہیں ہو گا۔</h5>
-            <h5>چینج ہو گا 5 دن میں۔</h5> --}}
-            <span>{{ $invoice->notes }}</span>
-        </div>
         <div class="footer">
             <hr>
-            <h5 class="text-center">Developed by Diamond Software <br> diamondsoftwareqta.com</h5>
+            <h5 class="text-center">Developed by Nexgen Pakistan, Quetta <br> 0331-0070041</h5>
         </div>
     </div>
 </body>
@@ -166,7 +159,7 @@ setTimeout(function() {
     window.print();
     }, 2000);
         setTimeout(function() {
-            window.location.href = "{{ url('pos')}}";
+            window.location.href = "{{ url('bills/create')}}";
     }, 5000);
 
 </script>

@@ -181,7 +181,7 @@
 										<a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#newOrderTab">New Order (<span class="itemsQty">0</span>)</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#orderHistoryTab">Order History (0)</a>
+										<a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#orderHistoryTab">Active Orders ({{$orders->count()}})</a>
 									</li>
 								</ul>
 							</div>
@@ -200,15 +200,46 @@
 
 								<!-- BEGIN #orderHistoryTab -->
 								<div class="tab-pane fade h-100" id="orderHistoryTab">
-									<div class="h-100 d-flex align-items-center justify-content-center text-center p-20">
+									<div class="h-100">
 										<div>
-											<div class="mb-3 mt-n5">
+											@if ($orders->count() > 0)
+                                            <table class="table w-100">
+                                                @foreach ($orders as $order)
+                                                    <tr>
+                                                        <td class="text-start">
+                                                            <div class="h6 mb-1">{{$order->type}}</div>
+                                                            @if ($order->type == 'Dine-In')
+                                                                <p class="h6 mb-1">{{$order->table->name}}</p>
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <p class="h6 mb-1">{{ $order->created_at->format('h:i:s A') }}</p>
+                                                            <p class="mb-1">{{date('d-m-Y', strtotime($order->date))}}</p>
+
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <p class="h6 mb-1">{{ $order->waiter->name }}</p>
+                                                            <p class="mb-1">Rs. {{$order->details->sum('amount')}}</p>
+
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <a href="{{route('bills.edit', $order->id)}}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                                            <a href="{{route('bills.show', $order->id)}}" class="btn btn-theme btn-sm"><i class="fa fa-print"></i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                @endforeach
+                                            </table>
+
+                                            @else
+                                            <div class="mb-3 mt-5">
 												<svg width="6em" height="6em" viewBox="0 0 16 16" class="text-gray-300" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 													<path fill-rule="evenodd" d="M14 5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5zM1 4v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4H1z"/>
 													<path d="M8 1.5A2.5 2.5 0 0 0 5.5 4h-1a3.5 3.5 0 1 1 7 0h-1A2.5 2.5 0 0 0 8 1.5z"/>
 												</svg>
 											</div>
-											<h5>No order history found</h5>
+											<h5>No active order found</h5>
+                                            @endif
 										</div>
 									</div>
 								</div>
@@ -488,7 +519,14 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    console.log(response);
+                    if(type == 'save')
+                    {
+                        window.location.href = "{{ url('bills/create')}}";
+                    }
+                    else
+                    {
+                        window.location.href = "{{ url('bills/')}}/"+response.id;
+                    }
                 },
                 error: function(error) {
                     // Handle errors, e.g., display an error message
