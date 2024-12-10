@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('bill_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('billID')->constrained('bills', 'id');
-            $table->foreignId('itemID')->constrained('items', 'id');
+            $table->foreignId('sizeID')->constrained('sizes', 'id');
             $table->float('qty');
             $table->float('price');
+            $table->float('amount');
             $table->date('date');
             $table->bigInteger('refID');
             $table->timestamps();

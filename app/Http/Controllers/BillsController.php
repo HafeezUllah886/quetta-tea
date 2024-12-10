@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\accounts;
+use App\Models\bill_details;
 use App\Models\bills;
 use App\Models\categories;
+use App\Models\item_beverages;
 use App\Models\items;
 use App\Models\sizes;
+use App\Models\tables;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use function Laravel\Prompts\table;
 
 class BillsController extends Controller
 {
@@ -28,8 +35,10 @@ class BillsController extends Controller
         $items = items::where('status', 'Active')->get();
         $categories = categories::all();
         $customers = accounts::Customer()->get();
+        $waiters = User::Waiters()->get();
+        $tables = tables::where('status', 'Active')->get();
 
-        return view('pos.pos', compact('items', 'categories', 'customers'));
+        return view('pos.pos', compact('items', 'categories', 'customers', 'waiters', 'tables'));
     }
 
     /**
@@ -37,15 +46,73 @@ class BillsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try
+        {
+            DB::beginTransaction();
+            $ref = getRef();
+            $bill = bills::create(
+                [
+                  'waiterID'        => $request->waiter,
+                  'customerID'      => 7,
+                  'tableID'         => $request->table,
+                  'date'            => date('Y-m-d'),
+                  'type'            => $request->type,
+                  'refID'           => $ref,
+                ]
+            );
+
+            $items = $request->item;
+
+            $total = 0;
+            foreach($items as $key => $item)
+            {
+
+                bill_details::create(
+                    [
+                        'billID'        => $bill->id,
+                        'sizeID'        => $request->size[$key],
+                        'price'         => $request->price[$key],
+                        'qty'           => $request->qty[$key],
+                        'amount'        => $request->amount[$key],
+                        'date'          => $bill->date,
+                        'refID'         => $ref,
+                    ]
+                );
+                $dealItems = item_beverages::where('itemID', $item)->get();
+
+                foreach($dealItems as $deal)
+                {
+                    createStock($deal->rawID, 0, 1, $bill->date, "Issued in bill no. $bill->id", $ref);
+                }
+
+            }
+
+            DB::commit();
+            return response()->json(
+                [
+                    'status' => 'Saved',
+                    'id' => $bill->id,
+                ]
+            );
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return response()->json(
+                [
+                    'status' => 'Error',
+                    'msg' => $e->getMessage(),
+                ]
+            );
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(bills $bills)
+    public function show(Request $request, $id)
     {
-        //
+        dd($request);
     }
 
     /**

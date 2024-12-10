@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Studio | POS - Customer Order System</title>
+	<title>RMS - POS</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
@@ -168,9 +168,9 @@
 										<i class="fa fa-chevron-left"></i>
 									</button>
 								</div>
-								<div class="icon"><i class="fa fa-plate-wheat"></i></div>
+								{{-- <div class="icon"><i class="fa fa-plate-wheat"></i></div>
 								<div class="title">Table 01</div>
-								<div class="order small">Order: <span class="fw-semibold">#0056</span></div>
+								<div class="order small">Order: <span class="fw-semibold">#0056</span></div> --}}
 							</div>
 							<!-- END pos-sidebar-header -->
 
@@ -190,10 +190,12 @@
 							<!-- BEGIN pos-sidebar-body -->
 							<div class="pos-sidebar-body tab-content" data-scrollbar="true" data-height="100%">
 								<!-- BEGIN #newOrderTab -->
-								<div class="tab-pane fade h-100 show active" id="newOrderTab">
-									<!-- BEGIN pos-order -->
+                                <form id="items_form" method="get">
+                                    <div class="tab-pane fade h-100 show active" id="newOrderTab">
+                                        <!-- BEGIN pos-order -->
 
-								</div>
+                                    </div>
+                                </form>
 								<!-- END #orderHistoryTab -->
 
 								<!-- BEGIN #orderHistoryTab -->
@@ -222,25 +224,51 @@
                                     <input type="hidden" name="total" id="total">
 								</div>
 								<div class="mt-3">
+                                    <form method="get" id="main_form">
+                                        @csrf
+									<div class="row mb-2">
+										<div class="col-12">
+											<div class="form-group mb-2">
+												<select name="waiter" id="" class="form-control">
+                                                    @foreach ($waiters as $waiter)
+                                                        <option value="{{$waiter->id}}">{{$waiter->name}}</option>
+                                                    @endforeach
+                                                </select>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="form-group">
+												<select name="type" id="" class="form-control">
+                                                    <option>Dine-In</option>
+                                                    <option>Delivery</option>
+                                                    <option>Take Away</option>
+                                                </select>
+											</div>
+										</div>
+                                        <div class="col-6">
+											<div class="form-group ">
+												<select name="table" id="" required class="form-control">
+                                                    @foreach ($tables as $table)
+                                                        <option value="{{$table->id}}">{{$table->name}}</option>
+                                                    @endforeach
+                                                </select>
+											</div>
+										</div>
+									</div>
+                                </form>
 									<div class="d-flex">
-										<a href="#" class="btn btn-default w-70px me-10px d-flex align-items-center justify-content-center">
+										<span onclick="submitForm('savep')" class="btn btn-default flex-fill d-flex align-items-center justify-content-center m-1">
 											<span>
-												<i class="fa fa-bell fa-lg my-10px d-block"></i>
-												<span class="small fw-semibold">Service</span>
+												<i class="fa fa-print fa-lg my-10px d-block"></i>
+												<span class="small fw-semibold">Save & Print</span>
 											</span>
-										</a>
-										<a href="#" class="btn btn-default w-70px me-10px d-flex align-items-center justify-content-center">
+										</span>
+										<span onclick="submitForm('save')" class="btn btn-theme flex-fill d-flex align-items-center justify-content-center m-1">
 											<span>
-												<i class="fa fa-receipt fa-fw fa-lg my-10px d-block"></i>
-												<span class="small fw-semibold">Bill</span>
+												<i class="fa fa-database fa-lg my-10px d-block"></i>
+												<span class="small fw-semibold">Save</span>
 											</span>
-										</a>
-										<a href="#" class="btn btn-theme flex-fill d-flex align-items-center justify-content-center">
-											<span>
-												<i class="fa fa-cash-register fa-lg my-10px d-block"></i>
-												<span class="small fw-semibold">Submit Order</span>
-											</span>
-										</a>
+										</span>
 									</div>
 								</div>
 							</div>
@@ -391,12 +419,23 @@
 						cartHTML += '</div>';
                         cartHTML += '<input type="hidden" name="item[]" value="'+response.itemid+'">';
                         cartHTML += '<input type="hidden" name="size[]" value="'+response.sizeid+'">';
-                        cartHTML += '<input type="hidden" id="price_'+time+'" value="'+response.price+'">';
+                        cartHTML += '<input type="hidden" name="price[]" id="price_'+time+'" value="'+response.price+'">';
                         cartHTML += '<input type="hidden" id="amount_'+time+'" name="amount[]" value="'+amount+'">';
                         cartHTML += '</div>';
 
                     $("#newOrderTab").append(cartHTML);
                     updateTotal();
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 401) {
+                        // Session expired, display error message
+                        alert("Session Expired. Please login again.");
+                        // Optionally, redirect to login page:
+                        window.location.href = "{{ url('/') }}";
+                    } else {
+                        // Handle other errors as needed
+                        console.error("Error:", error);
+                    }
                 }
             });
     }
@@ -426,6 +465,36 @@
         function deleteRow(id) {
             $("#row_" + id).remove();
             updateTotal();
+        }
+
+        function submitForm(type)
+        {
+            var itemsForm = $("#items_form");
+            var itemFields = itemsForm.find("input[id^='amount_']");
+
+            // Check if at least one item field exists
+            if (itemFields.length === 0) {
+                alert("Please select at least one item.");
+                return; // Prevent further processing if no item field is found
+            }
+            var itemsData = itemsForm.serialize();
+            var mainForm = $("#main_form").serialize();
+            var data = itemsData + '&' + mainForm;
+            $.ajax({
+                type: 'post',
+                url: '{{route("bills.store")}}', // Replace with your script's URL
+                data: data,
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    // Handle errors, e.g., display an error message
+                    alert(error);
+                }
+            });
         }
 
 </script>

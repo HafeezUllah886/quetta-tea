@@ -56,4 +56,8 @@ class User extends Authenticatable
     {
         return $query->where('role', 'Chef');
     }
+    public function scopeWaiters($query)
+    {
+        return $query->where('role', 'Waiter');
+    }
 }

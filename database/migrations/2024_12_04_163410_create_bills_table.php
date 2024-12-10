@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('waiterID')->constrained('users', 'id');
             $table->foreignId('customerID')->constrained('users', 'id');
+            $table->foreignId('tableID')->constrained('tables', 'id');
             $table->date('date');
             $table->string('type');
             $table->string('status')->default('Active');
