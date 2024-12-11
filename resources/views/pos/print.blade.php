@@ -71,7 +71,7 @@
     <div class="main" id="main">
         <div style="text-align: center;">
             <img style="margin:0 auto;height:200px;" src="{{ asset('assets/images/logo.png') }}" alt="">
-            <h2 class="text-center" style="margin: 0">QUETTA BAITHAK RESTAURANT</h2>
+            <h2 class="text-center" style="margin: 0">{{projectNameAuth()}}</h2>
             <h3 class="text-center" style="margin: 0">Hana Bypass Nawan Killi Quetta</h3>
             <h5 class="text-center" style="margin: 0">+92 324 8967759</h5>
          </div>

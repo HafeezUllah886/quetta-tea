@@ -220,7 +220,7 @@ class PurchaseController extends Controller
         {
             DB::beginTransaction();
             $purchase = purchase::find($id);
-           
+
             foreach($purchase->details as $product)
             {
                 stock::where('refID', $product->refID)->delete();

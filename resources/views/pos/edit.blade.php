@@ -192,8 +192,37 @@
 								<!-- BEGIN #newOrderTab -->
                                 <form id="items_form" method="get">
                                     <div class="tab-pane fade h-100 show active" id="newOrderTab">
-                                        <!-- BEGIN pos-order -->
+                                      @foreach ($bill->details as $key => $item)
+                                      @php
+                                          $qtyID = "cartqty_" . $key;
+                                      @endphp
+                                      <div class="pos-order" id="row_{{$key}}">
+                                        <div class="pos-order-product">
+                                            <div class="img" style="background-image: url({{asset($item->size->item->img)}})"></div>
+                                            <div class="flex-1">
+                                                <div class="h6 mb-1">{{$item->size->item->name}}</div>
+                                                <div class="small">- Size: {{$item->size->name}}</div>
+                                                <div class="small">- Price: {{$item->price}}</div>
+                                                <div class="d-flex">
+                                                    <span onclick='subQty("{{$qtyID}}")' class="btn btn-secondary btn-sm"><i class="fa fa-minus"></i></span>
+                                                    <input type="number" class="form-control w-50px form-control-sm mx-2 bg-white bg-opacity-25 bg-white bg-opacity-25 text-center" name="qty[]" oninput="updateQty({{$key}})" id="q{{$qtyID}}" value="{{$item->qty}}">
+                                                    <span onclick='addQty("{{$qtyID}}")' class="btn btn-secondary btn-sm"><i class="fa fa-plus"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pos-order-price d-flex flex-column">
+                                            <div class="flex-1" id="amountplace_{{$key}}">{{$item->amount}}</div>
+                                            <div class="text-end">
+                                                <span onclick="deleteRow({{$key}})" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="item[]" value="{{$item->itemID}}">
+                                        <input type="hidden" name="size[]" value="{{$item->sizeID}}">
+                                        <input type="hidden" name="price[]" id="price_{{$key}}" value="{{$item->price}}">
+                                        <input type="hidden" id="amount_{{$key}}" name="amount[]" value="{{$item->amount}}">
+                                        </div>
 
+                                      @endforeach
                                     </div>
                                 </form>
 								<!-- END #orderHistoryTab -->
@@ -310,7 +339,6 @@
 				</div>
 			</div>
 			<!-- END pos -->
-
 			<!-- BEGIN pos-mobile-sidebar-toggler -->
 			<a href="#" class="pos-mobile-sidebar-toggler" data-toggle-class="pos-mobile-sidebar-toggled" data-toggle-target="#pos">
 				<i class="fa fa-shopping-bag"></i>
@@ -408,10 +436,7 @@
             $("#q"+id).val(qty1);
             updateQty(id.replace('cartqty_', ''));
         }
-
-
     }
-
     function addToCart(e, id)
     {
         e.preventDefault();
@@ -453,7 +478,6 @@
                         cartHTML += '<input type="hidden" name="price[]" id="price_'+time+'" value="'+response.price+'">';
                         cartHTML += '<input type="hidden" id="amount_'+time+'" name="amount[]" value="'+amount+'">';
                         cartHTML += '</div>';
-
                     $("#newOrderTab").append(cartHTML);
                     updateTotal();
                 },
@@ -478,7 +502,7 @@
             $("#amountplace_" + id).html(amount.toFixed(2));
             updateTotal();
         }
-
+        updateTotal();
         function updateTotal() {
             var total = 0;
             $("input[id^='amount_']").each(function() {
@@ -512,16 +536,16 @@
             var mainForm = $("#main_form").serialize();
             var data = itemsData + '&' + mainForm;
             $.ajax({
-                type: 'post',
-                url: '{{route("bills.store")}}', // Replace with your script's URL
+                type: 'put',
+                url: '{{route("bills.update",$bill->id)}}', // Replace with your script's URL
                 data: data,
                 headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    console.log(response);
                     if(type == 'save')
                     {
+                        alert("Order Updated");
                         window.location.href = "{{ url('bills/create')}}";
                     }
                     else

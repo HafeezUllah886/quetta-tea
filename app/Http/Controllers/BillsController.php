@@ -9,8 +9,10 @@ use App\Models\categories;
 use App\Models\item_beverages;
 use App\Models\items;
 use App\Models\sizes;
+use App\Models\stock;
 use App\Models\tables;
 use App\Models\User;
+use App\Models\users_transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,10 +23,13 @@ class BillsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(request $request)
     {
-        $bills = bills::all();
-        return view('pos.index', compact('bills'));
+        $start = $request->start ?? now()->toDateString();
+        $end = $request->end ?? now()->toDateString();
+
+        $bills = bills::whereBetween("date", [$start, $end])->orderby('id', 'desc')->get();
+        return view('pos.index', compact('bills', 'start', 'end'));
     }
 
     /**
@@ -68,6 +73,8 @@ class BillsController extends Controller
             foreach($items as $key => $item)
             {
 
+                $total += $request->amount[$key];
+
                 bill_details::create(
                     [
                         'billID'        => $bill->id,
@@ -88,6 +95,8 @@ class BillsController extends Controller
                 }
 
             }
+
+            createUserTransaction(auth()->user()->id, $bill->date, $total, 0, "Payment of Bill No. $bill->id", $ref);
 
             DB::commit();
             return response()->json(
@@ -124,17 +133,90 @@ class BillsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(bills $bills)
+    public function edit(bills $bill)
     {
-        //
+        $items = items::where('status', 'Active')->get();
+        $categories = categories::all();
+        $customers = accounts::Customer()->get();
+        $waiters = User::Waiters()->get();
+        $tables = tables::where('status', 'Active')->get();
+        $orders = bills::where('status', 'Active')->get();
+
+        return view('pos.edit', compact('items', 'categories', 'customers', 'waiters', 'tables', 'orders','bill'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, bills $bills)
+    public function update(Request $request, bills $bill)
     {
-        //
+        try
+        {
+            DB::beginTransaction();
+            foreach($bill->details as $product)
+            {
+                stock::where('refID', $product->refID)->delete();
+                $product->delete();
+            }
+            users_transactions::where('refID', $bill->refID)->delete();
+            $ref = getRef();
+            $bill->update(
+                [
+                  'waiterID'        => $request->waiter,
+                  'tableID'         => $request->table,
+                  'date'            => date('Y-m-d'),
+                  'type'            => $request->type,
+                ]
+            );
+
+            $items = $request->item;
+
+            $total = 0;
+            foreach($items as $key => $item)
+            {
+                $total += $request->amount[$key];
+
+                bill_details::create(
+                    [
+                        'billID'        => $bill->id,
+                        'itemID'        => $request->item[$key],
+                        'sizeID'        => $request->size[$key],
+                        'price'         => $request->price[$key],
+                        'qty'           => $request->qty[$key],
+                        'amount'        => $request->amount[$key],
+                        'date'          => $bill->date,
+                        'refID'         => $ref,
+                    ]
+                );
+                $dealItems = item_beverages::where('itemID', $item)->get();
+
+                foreach($dealItems as $deal)
+                {
+                    createStock($deal->rawID, 0, 1, $bill->date, "Issued in bill no. $bill->id", $ref);
+                }
+
+            }
+
+            createUserTransaction(auth()->user()->id, $bill->date, $total, 0, "Payment of Bill No. $bill->id", $ref);
+
+            DB::commit();
+            return response()->json(
+                [
+                    'status' => 'Updated',
+                    'id' => $bill->id,
+                ]
+            );
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return response()->json(
+                [
+                    'status' => 'Error',
+                    'msg' => $e->getMessage(),
+                ]
+            );
+        }
     }
 
     /**

@@ -68,7 +68,7 @@
                                     data-key="t-chat">Create Bill</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('issuevauchar.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Bills
+                                <a href="{{ route('bills.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Bills
                                     History </a>
                             </li>
                         </ul>

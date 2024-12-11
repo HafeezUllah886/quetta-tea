@@ -10,4 +10,5 @@ Route::middleware('auth', cashierCheck::class)->group(function () {
     Route::get('bill/allitems', [BillsController::class, 'allItems']);
     Route::get('bill/bycategory/{id}', [BillsController::class, 'bycategory']);
     Route::get('bill/addtocart', [BillsController::class, 'addtocart']);
+    Route::get('bill/delete', [BillsController::class, 'destroy'])->name('bill.delete');
 });

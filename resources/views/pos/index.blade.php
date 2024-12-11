@@ -23,7 +23,7 @@
             </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Purchases</h3>
+                    <h3>Bills History</h3>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -39,22 +39,26 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>Purchase #</th>
-                            <th>Vendor</th>
+                            <th>Bill #</th>
+                            <th>Waiter</th>
+                            <th>Table / Type</th>
                             <th>Date</th>
+                            <th>Time</th>
                             <th>Amount</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            @foreach ($purchases as $key => $purchase)
+                            @foreach ($bills as $key => $bill)
                                 @php
-                                    $amount = $purchase->details->sum('amount');
+                                    $amount = $bill->details->sum('amount');
                                 @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $purchase->id }}</td>
-                                    <td>{{ $purchase->vendor->title }}</td>
-                                    <td>{{ date('d M Y', strtotime($purchase->date)) }}</td>
+                                    <td>{{ $bill->id }}</td>
+                                    <td>{{ $bill->waiter->name }}</td>
+                                    <td>{{ $bill->type == "Dine-In" ? $bill->table->name : $bill->type }}</td>
+                                    <td>{{ date('d M Y', strtotime($bill->date)) }}</td>
+                                    <td>{{ date('h:i:s A', strtotime($bill->created_at)) }}</td>
                                     <td>{{ number_format($amount) }}</td>
                                     <td>
                                         <div class="dropdown">
@@ -64,20 +68,20 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
-                                                    <button class="dropdown-item" onclick="newWindow('{{route('purchase.show', $purchase->id)}}')"
+                                                    <button class="dropdown-item" onclick="newWindow('{{route('bills.show', $bill->id)}}')"
                                                         onclick=""><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                         View
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" onclick="newWindow('{{route('purchase.edit', $purchase->id)}}')">
+                                                    <a class="dropdown-item" onclick="newWindow('{{route('bills.edit', $bill->id)}}')">
                                                         <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                         Edit
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item text-danger" href="{{route('purchases.delete', $purchase->id)}}">
+                                                    <a class="dropdown-item text-danger" href="{{route('bill.delete', $bill->id)}}">
                                                         <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
                                                         Delete
                                                     </a>
